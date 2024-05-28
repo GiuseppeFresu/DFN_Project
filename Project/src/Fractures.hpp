@@ -15,8 +15,10 @@ namespace FractureLibrary
 
     struct Fractures
     {
-        int NumberFractures = 0;
-        vector<unsigned int> FracturesId = {};
-        vector<Matrix3Xd> FracturesVertices = {};
+        size_t NumberFractures;
+        vector<unsigned int> FracturesId;
+        vector<Matrix3Xd> FracturesVertices;
+
+        Fractures() : NumberFractures(0){}
     };
 }

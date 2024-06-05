@@ -44,6 +44,16 @@ list(APPEND DFN_SOURCES ${src_sources})
 list(APPEND DFN_HEADERS ${src_headers})
 list(APPEND DFN_INCLUDE ${src_includes})
 
+add_subdirectory(TestingParaview/Code/src)
+list(APPEND ${CMAKE_PROJECT_NAME}_sources ${src_paraview_sources})
+list(APPEND ${CMAKE_PROJECT_NAME}_headers ${src_paraview_headers})
+list(APPEND ${CMAKE_PROJECT_NAME}_includes ${src_paraview_includes})
+
+add_subdirectory(src_test)
+list(APPEND ${CMAKE_PROJECT_NAME}_TEST_sources ${src_test_sources})
+list(APPEND ${CMAKE_PROJECT_NAME}_TEST_headers ${src_test_headers})
+list(APPEND ${CMAKE_PROJECT_NAME}_TEST_includes ${src_test_includes})
+
 # Add file
 ###############################################################################
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/DFN DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
@@ -56,6 +66,18 @@ add_executable(${PROJECT_NAME}
 	${DFN_SOURCES}
     ${DFN_HEADERS})
 
+add_executable(${PROJECT_NAME}_TEST
+    main_test.cpp
+    ${DFN_PARAVIEW_SOURCES}
+    ${DFN_PARAVIEW_HEADERS}
+    ${DFN_TEST_SOURCES}
+    ${DFN_TEST_HEADERS})
+
 target_link_libraries(${PROJECT_NAME} ${DFN_LINKED_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${DFN_INCLUDE})
 target_compile_options(${PROJECT_NAME} PUBLIC -fPIC)
+
+
+target_include_directories(${PROJECT_NAME}_TEST PUBLIC ${DFN_PARAVIEW_INCLUDES} ${DFN_TEST_INCLUDES})
+target_link_libraries(${PROJECT_NAME}_TEST PUBLIC ${DFN_LINKED_LIBRARIES})
+target_compile_options(${PROJECT_NAME}_TEST PUBLIC -fPIC)

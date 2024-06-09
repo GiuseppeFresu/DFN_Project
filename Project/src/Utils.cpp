@@ -336,4 +336,66 @@ namespace FractureLibrary
         }
 
     }
+// Funzione che calcola il vettore normale di un piano definito da tre punti
+    Point calcolaNormale(const Point& p1, const Point& p2, const Point& p3) {
+        Point u = {p2.x - p1.x, p2.y - p1.y, p2.z - p1.z};
+        Point v = {p3.x - p1.x, p3.y - p1.y, p3.z - p1.z};
+        Point normale = {
+            u.y * v.z - u.z * v.y,
+            u.z * v.x - u.x * v.z,
+            u.x * v.y - u.y * v.x
+        };
+        return normale;
+    }
+
+    // Funzione per calcolare il prodotto scalare tra due vettori
+    double dotProduct(const Point& u, const Point& v) {
+        return u.x * v.x + u.y * v.y + u.z * v.z;
+    }
+
+    // Funzione per calcolare il prodotto vettoriale tra due vettori
+    Point crossProduct(const Point& u, const Point& v) {
+        return {
+            u.y * v.z - u.z * v.y,
+            u.z * v.x - u.x * v.z,
+            u.x * v.y - u.y * v.x
+        };
+    }
+
+    // Funzione per trovare l'intersezione tra un segmento e una retta con direzione definita dal vettore t
+    std::optional<Point> intersezioneLineaSegmento(const Point& t, const Point& s1, const Point& s2) {
+        Point direction = {s2.x - s1.x, s2.y - s1.y, s2.z - s1.z};
+        Point w = {-s1.x, -s1.y, -s1.z};
+        double denom = dotProduct(crossProduct(direction, t), crossProduct(direction, t));
+        if (denom == 0.0) return std::nullopt; // La retta e il segmento sono paralleli
+        double t_param = dotProduct(crossProduct(w, direction), crossProduct(direction, t)) / denom;
+        if (t_param >= 0.0 && t_param <= 1.0) {
+            return Point{
+                s1.x + t_param * direction.x,
+                s1.y + t_param * direction.y,
+                s1.z + t_param * direction.z
+            };
+        }
+        return std::nullopt;
+    }
+
+    // Funzione per calcolare le intersezioni tra i segmenti dei poligoni
+    std::vector<Point> calcolaIntersezioni(const std::vector<Point>& vertici1, const Point& normale1, const std::vector<Point>& vertici2, const Point& normale2) {
+        std::vector<Point> intersezioni;
+
+        Point t = crossProduct(normale1, normale2); // Direzione della linea di intersezione
+        if (dotProduct(t, t) == 0.0) return intersezioni; // I piani sono paralleli
+
+        // Trova le intersezioni tra la linea e i bordi dei poligoni
+        for (size_t i = 0; i < vertici1.size(); ++i) {
+            auto intersezione = intersezioneLineaSegmento(t, vertici1[i], vertici1[(i + 1) % vertici1.size()]);
+            if (intersezione) intersezioni.push_back(*intersezione);
+        }
+        for (size_t i = 0; i < vertici2.size(); ++i) {
+            auto intersezione = intersezioneLineaSegmento(t, vertici2[i], vertici2[(i + 1) % vertici2.size()]);
+            if (intersezione) intersezioni.push_back(*intersezione);
+        }
+
+        return intersezioni;
+    }
 }

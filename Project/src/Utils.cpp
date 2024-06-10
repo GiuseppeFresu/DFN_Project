@@ -362,8 +362,8 @@ namespace FractureLibrary
         };
     }
 
-    // Funzione per trovare l'intersezione tra un segmento e una retta con direzione definita dal vettore t
-    std::optional<Point> intersezioneLineaSegmento(const Point& t, const Point& s1, const Point& s2) {
+    // Funzione per trovare l'intersezione tra un lato della frattura e una retta con direzione definita dal vettore t
+    std::optional<Point> intersezioneRettaLato(const Point& t, const Point& s1, const Point& s2) {
         Point direction = {s2.x - s1.x, s2.y - s1.y, s2.z - s1.z};
         Point w = {-s1.x, -s1.y, -s1.z};
         double denom = dotProduct(crossProduct(direction, t), crossProduct(direction, t));
@@ -379,20 +379,20 @@ namespace FractureLibrary
         return std::nullopt;
     }
 
-    // Funzione per calcolare le intersezioni tra i segmenti dei poligoni
+    // Funzione per calcolare le intersezioni tra i lati dei poligoni
     std::vector<Point> calcolaIntersezioni(const std::vector<Point>& vertici1, const Point& normale1, const std::vector<Point>& vertici2, const Point& normale2) {
         std::vector<Point> intersezioni;
 
-        Point t = crossProduct(normale1, normale2); // Direzione della linea di intersezione
+        Point t = crossProduct(normale1, normale2); // Direzione della retta di intersezione
         if (dotProduct(t, t) == 0.0) return intersezioni; // I piani sono paralleli
 
         // Trova le intersezioni tra la linea e i bordi dei poligoni
         for (size_t i = 0; i < vertici1.size(); ++i) {
-            auto intersezione = intersezioneLineaSegmento(t, vertici1[i], vertici1[(i + 1) % vertici1.size()]);
+            auto intersezione = intersezioneRettaLato(t, vertici1[i], vertici1[(i + 1) % vertici1.size()]);
             if (intersezione) intersezioni.push_back(*intersezione);
         }
         for (size_t i = 0; i < vertici2.size(); ++i) {
-            auto intersezione = intersezioneLineaSegmento(t, vertici2[i], vertici2[(i + 1) % vertici2.size()]);
+            auto intersezione = intersezioneRettaLato(t, vertici2[i], vertici2[(i + 1) % vertici2.size()]);
             if (intersezione) intersezioni.push_back(*intersezione);
         }
 

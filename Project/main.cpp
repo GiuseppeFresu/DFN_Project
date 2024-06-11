@@ -43,6 +43,7 @@ int main()
 
         map<int, vector<int>> intersezioni_file;
         verificaIntersezioni(fractures, intersezioni_file);
+        calcolaIntersezioni(fractures, intersezioni_file);
 
         cout << "Intersezioni per il file " << filename << ":" << endl;
         for (const auto& entry : intersezioni_file)
@@ -58,7 +59,7 @@ int main()
             cout << endl;
         }
     }
-    std::vector<Traccia> tracce = calcolaIntersezioni(fractures);
+
     scriviTracce(tracce, "output_traces.txt");
     return 0;
 }

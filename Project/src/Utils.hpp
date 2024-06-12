@@ -17,15 +17,15 @@ namespace FractureLibrary
 
     Trace calcolaTraccia(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2, int& traceId);
 
+    void sortTracesByLength(Fractures& fractures);
+
+    void writeResults(const Fractures& fractures, const string& filename);
+
     using FracturePair = tuple<int, int, int>;
 
     extern set<FracturePair> coppieVerificate;
 
     extern const double epsilon;
-
-    void sortTracesByLength(Fractures& fractures);
-
-    void writeResults(const Fractures& fractures, const string& filename);
 
 
 }

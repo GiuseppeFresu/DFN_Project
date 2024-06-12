@@ -11,43 +11,43 @@ namespace FractureLibrary
     bool ImportFractures(const string& filename,
                           Fractures& fractures)
      {
-         ifstream file;
-         file.open(filename);
+        ifstream file;
+        file.open(filename);
 
-         if(file.fail())
+        if(file.fail())
+        {
+         cerr << "File open failed: " <<filename << endl;
+         return false;
+        }
+
+        list<string> listLines;
+        string line;
+        while (getline(file, line))
+        {
+         if (!line.empty() && line[0] == '#')
          {
-             cerr << "File open failed: " <<filename << endl;
-             return false;
+             continue;
          }
 
-         list<string> listLines;
-         string line;
-         while (getline(file, line))
-         {
-             if (!line.empty() && line[0] == '#')
-             {
-                 continue;
-             }
+         listLines.push_back(line);
+        }
 
-             listLines.push_back(line);
-         }
+        file.close();
 
-         file.close();
+        fractures.NumberFractures = stoi(listLines.front());
 
-         fractures.NumberFractures = stoi(listLines.front());
+        listLines.pop_front();
 
-         listLines.pop_front();
+        fractures.FracturesId.reserve(fractures.NumberFractures);
 
-         fractures.FracturesId.reserve(fractures.NumberFractures);
+        if (fractures.NumberFractures == 0)
+        {
+         cerr << "There is no fractures" << endl;
+         return false;
+        }
 
-         if (fractures.NumberFractures == 0)
-         {
-             cerr << "There is no fractures" << endl;
-             return false;
-         }
-
-         while (!listLines.empty())
-         {
+        while (!listLines.empty())
+        {
             string line = listLines.front();
             istringstream converter(line);
             unsigned int id;
@@ -100,9 +100,9 @@ namespace FractureLibrary
             }
 
             fractures.FracturesVertices.push_back(vertices);
-         }
+        }
 
-         return true;
+        return true;
      }
 
 
@@ -242,7 +242,6 @@ namespace FractureLibrary
            return false;
        }
 
-
     Trace calcolaTraccia(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2, int& traceId)
     {
         vector<Point> intersectionPoints;
@@ -290,7 +289,6 @@ namespace FractureLibrary
 
         return Trace(traceId++, id1, id2, pt1, pt2, true);
     }
-
 
     void verificaIntersezioni(Fractures& fractures,
                              map<int, vector<int>>& intersezioni)
@@ -359,7 +357,6 @@ namespace FractureLibrary
                 return a.length > b.length;
             });
         }
-
 
     void writeResults(const Fractures& fractures, const string& filename)
     {

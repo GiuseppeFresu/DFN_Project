@@ -1,44 +1,45 @@
 #include <iostream>
-#include <string>
 #include "Fractures.hpp"
 #include "Utils.hpp"
 
-using namespace std;
+
+
 using namespace FractureLibrary;
+using namespace std;
 
 int main()
 {
     string filepath = "DFN/";
-    vector<string> filenames = {"FR3_data.txt", "FR10_data.txt", "FR50_data.txt",
-                                "FR82_data.txt", "FR200_data.txt", "FR362_data.txt"};
+        vector<string> filenames = {"FR3_data.txt", "FR10_data.txt", "FR50_data.txt",
+                                    "FR82_data.txt", "FR200_data.txt", "FR362_data.txt"};
 
-    for (const auto& filename : filenames)
-    {
-        Fractures fractures;
 
-        if (!ImportFractures(filepath + filename, fractures))
+        for (const auto& filename : filenames)
         {
-            cerr << "Errore durante l'importazione delle fratture da " << filename << endl;
-            return 1;
-        }
+            Fractures fractures;
 
-        map<int, vector<int>> intersezioni_file;
-        verificaIntersezioni(fractures, intersezioni_file);
-
-        cout << "Intersezioni per il file " << filename << ":" << endl;
-        for (const auto& entry : intersezioni_file)
-        {
-            int id = entry.first;
-            const vector<int>& intersezioni = entry.second;
-
-            cout << "Frattura " << id << " interseca con: ";
-            for (int intersected_id : intersezioni)
+            if (!ImportFractures(filepath + filename, fractures))
             {
-                cout << intersected_id << " ";
+                cerr << "Errore durante l'importazione delle fratture da " << filename << endl;
+                return 1;
             }
-            cout << endl;
+
+            map<int, vector<int>> intersezioni_file;
+            verificaIntersezioni(fractures, intersezioni_file);
+
+            // Ordina le tracce per lunghezza
+            sortTracesByLength(fractures);
+
+            // Scrivi i risultati nel file
+            string outputFilename = filename + "_results.txt";
+            writeResults(fractures, outputFilename);
+
+            fractures.clear();
         }
+
+        return 0;
     }
 
-    return 0;
-}
+
+
+

@@ -29,6 +29,19 @@ namespace FractureLibrary
     extern set<FracturePair> coppieVerificate; // Dichiarazione esterna
 
     // Dichiarazione della variabile epsilon
-    extern const double epsilon; //constexpr
+    extern const double epsilon; //constexprù
+
+    Point calcolaNormale(const Point& u, const Point& v);
+
+    double dotProduct(const Point& u, const Point& v);
+
+    Point crossProduct(const Point&u, const Point& v);
+
+    Point intersezioneRettaLato(const Point& t, const Point& s1, const Point& s2);
+
+    std::vector<Point> calcolaIntersezioni(const std::vector<Point>& vertici1, const Point& normale,
+                                           const std::vector<Point>& vertici2, const Point& normale2);
+
 
     }
+

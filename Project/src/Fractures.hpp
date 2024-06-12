@@ -1,4 +1,3 @@
-#pragma once
 
 #include <vector>
 #include "Eigen/Eigen"
@@ -21,4 +20,13 @@ namespace FractureLibrary
 
         Fractures() : NumberFractures(0){}
     };
+
+    struct Traccia {
+        int id;
+        int fractureId1;
+        int fractureId2;
+        std::array<double, 3> point1;
+        std::array<double, 3> point2;
+    };
 }
+

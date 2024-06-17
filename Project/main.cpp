@@ -32,6 +32,10 @@ int main()
         string outputFilename = filename + "_results.txt";
         writeResults(fractures, outputFilename);
 
+        // Scrivo i risultati nel file per tracce passanti e non passanti
+        string outputFilenamePart3 = filename + "_results_fractures.txt";
+        writeResultsForFractures(fractures, outputFilenamePart3);
+
         fractures.clear();
     }
 

@@ -21,6 +21,8 @@ namespace FractureLibrary
 
     void writeResults(const Fractures& fractures, const string& filename);
 
+    void writeResultsForFractures(const Fractures& fractures, const string& filename);
+
     using FracturePair = tuple<int, int, int>;
 
     extern set<FracturePair> coppieVerificate;

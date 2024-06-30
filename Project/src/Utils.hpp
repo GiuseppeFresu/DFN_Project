@@ -11,25 +11,38 @@
 
 namespace FractureLibrary
 {
-    bool ImportFractures(const string& filename, Fractures& fractures);
 
-    void verificaIntersezioni(Fractures& fractures, map<int, vector<int>>& intersezioni);
+   extern const double epsilon;
 
-    Trace calcolaTraccia(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2, int& traceId);
+   using FracturePair = tuple<int, int, int>;
 
-    void sortTracesByLength(Fractures& fractures);
+   extern set<FracturePair> pairFound;
 
-    void writeResults(const Fractures& fractures, const string& filename);
+   bool ImportFractures(const string& filename,
+                        Fractures& fractures);
 
-    void writeResultsForFractures(const Fractures& fractures, const string& filename);
+   bool intersection2D(const vector<pair<double, double>>& P,
+                               const vector<pair<double, double>>& Q);
 
-    using FracturePair = tuple<int, int, int>;
+   vector<pair<double, double>> projectsOnPlane(const Matrix3Xd& vertices,
+                                                const string& plane);
 
-    extern set<FracturePair> coppieVerificate;
+   bool checkSeparation(const Matrix3Xd& P, const Matrix3Xd& Q);
 
-    extern const double epsilon;
+   bool isPointOnEdge(const Point& pt, const Matrix3Xd& vertices);
 
+   Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q,
+                        int id1, int id2, int& traceId);
+
+   void checkIntersections(Fractures& fractures,
+                             map<int,vector<int>>& intersections);
+
+   void sortTracesByLength(vector<Trace>& traces);
+
+   void writeTraces(const Fractures& fractures,
+                    const string& filename);
+
+   void writeResults(const Fractures& fractures,
+                                 const string& filename);
 
 }
-
-

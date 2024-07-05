@@ -7,6 +7,7 @@
 #include <map>
 #include <list>
 #include <set>
+#include <tuple>
 #include "Fractures.hpp"
 
 namespace FractureLibrary

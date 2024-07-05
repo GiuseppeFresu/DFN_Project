@@ -375,7 +375,6 @@ namespace FractureLibrary
                         try
                         {
                             Trace trace = calculateTrace(P, Q, id1, id2, traceId);
-                            #pragma omp critical
                             {
                                 fractures.Traces.push_back(trace);
                             }

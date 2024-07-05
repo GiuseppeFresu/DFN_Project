@@ -111,31 +111,32 @@ namespace FractureLibrary
 // ***************************************************************************
 
     bool intersection2D(const vector<pair<double, double>>& P,
-                            const vector<pair<double, double>>& Q)
+                        const vector<pair<double, double>>& Q)
     {
         auto getEdges = [](const vector<pair<double, double>>& poly)
         {
-            vector<pair<double, double>> edges;
+            vector<pair<double, double>> edges(poly.size());
             for (size_t i = 0; i < poly.size(); i++)
             {
                 size_t j = (i + 1) % poly.size();
-                edges.push_back({poly[j].first - poly[i].first,
-                                 poly[j].second - poly[i].second});
+                edges[i] = {poly[j].first - poly[i].first,
+                            poly[j].second - poly[i].second};
             }
             return edges;
         };
 
         auto getNormals = [](const vector<pair<double, double>>& edges)
         {
-            vector<pair<double, double>> normals;
-            for (const auto& edge : edges)
+            vector<pair<double, double>> normals(edges.size());
+            for (size_t i = 0; i < edges.size(); i++)
             {
-                normals.push_back({-edge.second, edge.first});
+                normals[i] = {-edges[i].second, edges[i].first};
             }
             return normals;
         };
 
-        auto project = [](const vector<pair<double, double>>& poly, const pair<double, double>& axis)
+        auto project = [](const vector<pair<double, double>>& poly,
+                          const pair<double, double>& axis)
         {
             double min = poly[0].first * axis.first + poly[0].second * axis.second;
             double max = min;
@@ -148,7 +149,8 @@ namespace FractureLibrary
             return make_pair(min, max);
         };
 
-        auto overlap = [](const pair<double, double>& p1, const pair<double, double>& p2)
+        auto overlap = [](const pair<double, double>& p1,
+                          const pair<double, double>& p2)
         {
             return !(p1.second + epsilon < p2.first || p2.second + epsilon < p1.first);
         };
@@ -160,16 +162,12 @@ namespace FractureLibrary
 
         for (const auto& axis : normalsP)
         {
-            auto projP = project(P, axis);
-            auto projQ = project(Q, axis);
-            if (!overlap(projP, projQ)) return false;
+            if (!overlap(project(P, axis), project(Q, axis))) return false;
         }
 
         for (const auto& axis : normalsQ)
         {
-            auto projP = project(P, axis);
-            auto projQ = project(Q, axis);
-            if (!overlap(projP, projQ)) return false;
+            if (!overlap(project(P, axis), project(Q, axis))) return false;
         }
 
         return true;
@@ -178,25 +176,30 @@ namespace FractureLibrary
 // ***************************************************************************
 
     vector<pair<double, double>> projectsOnPlane(const Matrix3Xd& vertices,
-                                             const string& plane)
+                                                 const string& plane)
     {
-        vector<pair<double, double>> projection;
-        for (int i = 0; i < vertices.cols(); i++)
+        vector<pair<double, double>> projection(vertices.cols());
+        if (plane == "XY")
         {
-            if (plane == "XY")
+            for (int i = 0; i < vertices.cols(); i++)
             {
-                projection.push_back({vertices(0, i), vertices(1, i)});
-            }
-            else if (plane == "YZ")
-            {
-                projection.push_back({vertices(1, i), vertices(2, i)});
-            }
-            else if (plane == "ZX")
-            {
-                projection.push_back({vertices(2, i), vertices(0, i)});
+                projection[i] = {vertices(0, i), vertices(1, i)};
             }
         }
-
+        else if (plane == "YZ")
+        {
+            for (int i = 0; i < vertices.cols(); i++)
+            {
+                projection[i] = {vertices(1, i), vertices(2, i)};
+            }
+        }
+        else if (plane == "ZX")
+        {
+            for (int i = 0; i < vertices.cols(); i++)
+            {
+                projection[i] = {vertices(2, i), vertices(0, i)};
+            }
+        }
         return projection;
     }
 
@@ -323,8 +326,7 @@ namespace FractureLibrary
 
 // ***************************************************************************
 
-    void checkIntersections(Fractures& fractures,
-                          map<int, vector<int>>& intersections)
+    void checkIntersections(Fractures& fractures, map<int, vector<int>>& intersections)
     {
         const vector<unsigned int>& ids = fractures.FracturesId;
         const vector<Matrix3Xd>& vertices = fractures.FracturesVertices;
@@ -364,28 +366,33 @@ namespace FractureLibrary
                 {
                     if (!checkSeparation(P, Q))
                     {
-                        intersections[id1].push_back(id2);
-                        intersections[id2].push_back(id1);
+                        {
+                            intersections[id1].push_back(id2);
+                            intersections[id2].push_back(id1);
+                            pairFound.insert(pair);
+                        }
 
                         try
                         {
                             Trace trace = calculateTrace(P, Q, id1, id2, traceId);
-                            fractures.Traces.push_back(trace);
+                            #pragma omp critical
+                            {
+                                fractures.Traces.push_back(trace);
+                            }
                         }
                         catch (const exception& e)
                         {
-                            cerr <<"Error calculating trace between fractures "
-                                 << id1 << " and " << id2 << ": " << e.what() << endl;
+                            {
+                                cerr <<"Error calculating trace between fractures "
+                                     << id1 << " and " << id2 << ": " << e.what() << endl;
+                            }
                         }
-
                     }
-
-                    pairFound.insert(pair);
-
                 }
             }
         }
     }
+
 
 // ***************************************************************************
 

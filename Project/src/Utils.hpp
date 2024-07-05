@@ -22,7 +22,7 @@ namespace FractureLibrary
                         Fractures& fractures);
 
    bool intersection2D(const vector<pair<double, double>>& P,
-                               const vector<pair<double, double>>& Q);
+                       const vector<pair<double, double>>& Q);
 
    vector<pair<double, double>> projectsOnPlane(const Matrix3Xd& vertices,
                                                 const string& plane);
@@ -34,8 +34,8 @@ namespace FractureLibrary
    Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q,
                         int id1, int id2, int& traceId);
 
-   void checkIntersections(Fractures& fractures,
-                             map<int,vector<int>>& intersections);
+   void checkIntersections(Fractures& fractures, map<int,
+                           vector<int>>& intersections);
 
    void sortTracesByLength(vector<Trace>& traces);
 

@@ -11,6 +11,12 @@ namespace FractureLibrary
     struct Point
     {
         double x, y, z;
+
+        Point(double x, double y, double z) : x(x), y(y), z(z) {}
+        bool operator==(const Point& other) const{
+            return (x == other.x && y == other.y == other.z);
+        }
+
     };
 
     struct Trace

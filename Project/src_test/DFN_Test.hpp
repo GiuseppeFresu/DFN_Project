@@ -63,5 +63,56 @@ namespace FractureLibrary
         EXPECT_TRUE((trace2.fractureId2 == 1) || (trace2.fractureId2 == 2));
         EXPECT_NE(trace1.fractureId2, trace2.fractureId2);
     }
+
+    TEST(FRACTURETEST, TestCalculateTraces)
+    {
+        Eigen::Matrix3Xd P(3,4);
+        P<< 1, 2, 3, 4,
+            1, 2, 3, 4,
+            1, 2, 3, 4;
+
+        Eigen::Matrix3Xd Q(3, 4);
+        Q<< 4, 3, 2, 1,
+            4, 3, 3, 1,
+            4, 3, 2, 1;
+
+        int id1 = 1;
+        int id2 = 2;
+        int traceId = 1;
+
+        Trace result = calculateTrace(P, Q, id1, id2, traceId);
+
+        Point expected_pt1(1.0, 2.0, 3.0);
+        Point expected_pt2(4.0, 5.0, 6.0);
+
+        bool expected_isTip = true;
+
+        EXPECT_EQ(result.p1,expected_pt1);
+        EXPECT_EQ(result.p2,expected_pt2);
+        EXPECT_EQ(result.Tips, expected_isTip);
+    }
+
+    TEST(FRACTURETEST, TestWriteTraces)
+    {
+        Fractures fractures;
+        fractures.Traces.push_back({1, 101, 102, {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, true});
+        fractures.Traces.push_back({2, 103, 104, {7.0, 8.0, 9.0}, {10.0, 11.0, 12.0}, false});
+        std::string testFilename = "test_output.txt";
+
+        writeTraces(fractures, testFilename);
+
+
+
+
+
+        std::string expectedContent =
+            "# Number of Traces\n"
+            "2\n"
+            "# TraceId; FractureId1; FractureId2; X1; Y1; Z1; X2; Y2; Z2\n"
+            "1; 101; 102; 1; 2; 3; 4; 5; 6\n"
+            "2; 103; 104; 7; 8; 9; 10; 11; 12\n";
+
+        EXPECT_EQ("test_output.txt",expectedContent);
+    }
 }
 #endif

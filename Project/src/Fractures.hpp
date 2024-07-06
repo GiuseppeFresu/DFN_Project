@@ -14,7 +14,7 @@ namespace FractureLibrary
 
         Point(double x, double y, double z) : x(x), y(y), z(z) {}
         bool operator==(const Point& other) const{
-            return (x == other.x && y == other.y == other.z);
+            return x == (other.x) && y == (other.y) && z == (other.z);
         }
 
     };

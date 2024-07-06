@@ -67,14 +67,14 @@ namespace FractureLibrary
     TEST(FRACTURETEST, TestCalculateTraces)
     {
         Eigen::Matrix3Xd P(3,4);
-        P<< 1, 2, 3, 4,
-            1, 2, 3, 4,
-            1, 2, 3, 4;
+        P<< 0, 2, 2, 0,
+            0, 0, 1, 1,
+            0, 0, 0, 0;
 
         Eigen::Matrix3Xd Q(3, 4);
-        Q<< 4, 3, 2, 1,
-            4, 3, 3, 1,
-            4, 3, 2, 1;
+        Q<< 1, 3, 3, 1,
+            -1, -1, 2, 2,
+            0, 0, 0, 0;
 
         int id1 = 1;
         int id2 = 2;
@@ -82,9 +82,8 @@ namespace FractureLibrary
 
         Trace result = calculateTrace(P, Q, id1, id2, traceId);
 
-        Point expected_pt1(1.0, 2.0, 3.0);
-        Point expected_pt2(4.0, 5.0, 6.0);
-
+        Point expected_pt1(1.0, 0.0, 0.0);
+        Point expected_pt2(2.0, 0.0, 0.0);
         bool expected_isTip = true;
 
         EXPECT_EQ(result.p1,expected_pt1);
@@ -109,8 +108,8 @@ namespace FractureLibrary
             "# Number of Traces\n"
             "2\n"
             "# TraceId; FractureId1; FractureId2; X1; Y1; Z1; X2; Y2; Z2\n"
-            "1; 101; 102; 1; 2; 3; 4; 5; 6\n"
-            "2; 103; 104; 7; 8; 9; 10; 11; 12\n";
+            "1; 101; 102; 1.0; 2.0; 3.0; 4.0; 5.0; 6.0\n"
+            "2; 103; 104; 7.0; 8.0; 9.0; 10.0; 11.0; 12.0\n";
 
         EXPECT_EQ("test_output.txt",expectedContent);
     }

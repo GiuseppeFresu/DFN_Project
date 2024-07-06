@@ -113,5 +113,102 @@ namespace FractureLibrary
 
         EXPECT_EQ("test_output.txt",expectedContent);
     }
+
+    TEST(FractureTest, WriteResultsTest)
+    {
+        // Creo un oggetto Fractures con dati di esempio
+        Fractures fractures;
+        fractures.NumberFractures = 3;
+        fractures.FracturesId = {0, 1, 2};
+
+        // Definizione dei punti che individuano le due tracce
+        Point p1 = {0.8, 0, 0};
+        Point p2 = {0.8544, 0, 0};
+        Point p3 = {0.591584, 0, 0};
+        Point p4 = {0.553659, 0, 0};
+
+        // creo le tracce
+        fractures.Traces.emplace_back(0, 0, 1, p1, p2, false);
+        fractures.Traces.emplace_back(1, 0, 2, p3, p4, true);
+
+        // Calcolo della lunghezza delle tracce (fatta nel costruttore)
+        fractures.Traces[0].length = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
+        fractures.Traces[1].length = sqrt(pow(p4.x - p3.x, 2) + pow(p4.y - p3.y, 2) + pow(p4.z - p3.z, 2));
+
+        string filename = "test_results.txt";
+
+        writeResults(fractures, filename);
+
+        ifstream inFile(filename);
+        ASSERT_TRUE(inFile.is_open());
+
+        // Verificare il contenuto del file
+        string line;
+
+        // Verifica dell'intestazione del file
+        getline(inFile, line);
+        EXPECT_EQ(line, "# FractureId; NumTraces");
+
+        // Fracture 0
+        getline(inFile, line);
+        EXPECT_EQ(line, "0; 2");
+        getline(inFile, line);
+        EXPECT_EQ(line, "# TraceId; Tips; Length");
+        getline(inFile, line);
+        EXPECT_EQ(line, "0; false; 0.0544004");
+        getline(inFile, line);
+        EXPECT_EQ(line, "1; true; 0.0379253");
+
+        // Fracture 1
+        getline(inFile, line);
+        EXPECT_EQ(line, "1; 1");
+        getline(inFile, line);
+        EXPECT_EQ(line, "# TraceId; Tips; Length");
+        getline(inFile, line);
+        EXPECT_EQ(line, "0; false; 0.0544004");
+
+        // Fracture 2
+        getline(inFile, line);
+        EXPECT_EQ(line, "2; 1");
+        getline(inFile, line);
+        EXPECT_EQ(line, "# TraceId; Tips; Length");
+        getline(inFile, line);
+        EXPECT_EQ(line, "1; true; 0.0379253");
+
+        inFile.close();
+        remove(filename.c_str());
+    }
+
+    TEST(FractureTest, SortTracesByLengthTest)
+    {
+        vector<Trace> traces;
+
+        Point p1 = {0, 0, 0};
+        Point p2 = {1, 0, 0};
+        Point p3 = {0, 2, 0};
+        Point p4 = {0, 0, 3};
+        Point p5 = {4, 0, 0};
+        Point p6 = {0, 5, 0};
+
+        // Creo delle tracce con lunghezze diverse
+        traces.emplace_back(0, 0, 1, p1, p2, false); // Lunghezza: 1.0
+        traces.emplace_back(2, 0, 2, p1, p3, true);  // Lunghezza: 2.0
+        traces.emplace_back(4, 0, 1, p1, p4, false); // Lunghezza: 3.0
+        traces.emplace_back(3, 1, 2, p1, p5, false); // Lunghezza: 4.0
+        traces.emplace_back(1, 1, 2, p1, p6, true);  // Lunghezza: 5.0
+
+        sortTracesByLength(traces);
+
+        //verifico che vettore abbia stesso numero di tracce
+        ASSERT_EQ(traces.size(), 5);
+
+        // Verifico che le tracce siano ordinate correttamente in ordine decrescente di lunghezza
+        ASSERT_EQ(traces[0].traceId, 1); // Lunghezza: 5.0
+        ASSERT_EQ(traces[1].traceId, 3); // Lunghezza: 4.0
+        ASSERT_EQ(traces[2].traceId, 4); // Lunghezza: 3.0
+        ASSERT_EQ(traces[3].traceId, 2); // Lunghezza: 2.0
+        ASSERT_EQ(traces[4].traceId, 0); // Lunghezza: 1.0
+
+    }
 }
 #endif

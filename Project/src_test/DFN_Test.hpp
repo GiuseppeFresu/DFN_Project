@@ -209,6 +209,5 @@ namespace FractureLibrary
            inFile.close();
            remove(filename.c_str());
        }
-
 }
 #endif

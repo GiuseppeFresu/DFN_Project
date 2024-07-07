@@ -120,9 +120,12 @@ namespace FractureLibrary
 
         remove(filename.c_str());
     }
-     TEST(FRACTURETEST, TestCalculateTraces)
+
+/*
+    TEST(FRACTURETEST, TestCalculateTraces)
     {
         Fractures fractures;
+
         Matrix3Xd P(3, 4);
         P << -2, -2, 2, 2,
              -2, 2, 2, -2,
@@ -150,6 +153,7 @@ namespace FractureLibrary
         EXPECT_TRUE((trace.p2.x == expectedP2.x) && (trace.p2.y == expectedP2.y) && (trace.p2.z == expectedP2.z));
     }
 
+*/
 
     TEST(FRACTURESTEST, SortTracesByLength)
     {

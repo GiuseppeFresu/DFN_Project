@@ -1,0 +1,22 @@
+# FractureId; NumTraces
+2; 3
+# TraceId; Tips; Length
+0; true; 1.14281
+2; true; 0.624027
+1; true; 0.0613723
+# FractureId; NumTraces
+5; 2
+# TraceId; Tips; Length
+0; true; 1.14281
+3; true; 0.624027
+# FractureId; NumTraces
+7; 2
+# TraceId; Tips; Length
+4; true; 0.624027
+1; true; 0.0613723
+# FractureId; NumTraces
+9; 3
+# TraceId; Tips; Length
+3; true; 0.624027
+2; true; 0.624027
+4; true; 0.624027

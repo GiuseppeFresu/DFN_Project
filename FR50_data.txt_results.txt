@@ -1,0 +1,662 @@
+# FractureId; NumTraces
+0; 5
+# TraceId; Tips; Length
+0; true; 1.46875
+4; true; 0.531779
+1; true; 0.457869
+2; true; 0.125243
+3; true; 0.098768
+# FractureId; NumTraces
+1; 3
+# TraceId; Tips; Length
+5; true; 0.729605
+6; true; 0.628376
+7; true; 0.0151973
+# FractureId; NumTraces
+2; 5
+# TraceId; Tips; Length
+0; true; 1.46875
+11; true; 1.28274
+9; true; 0.628376
+8; true; 0.28193
+10; true; 0.125243
+# FractureId; NumTraces
+3; 23
+# TraceId; Tips; Length
+28; true; 1.80186
+24; true; 1.478
+33; true; 1.28274
+22; true; 1.12511
+17; true; 0.86327
+27; true; 0.732273
+5; true; 0.729605
+15; true; 0.628376
+14; true; 0.542141
+16; true; 0.457869
+12; true; 0.421288
+31; true; 0.408308
+32; true; 0.299866
+20; true; 0.294568
+26; true; 0.284714
+30; true; 0.232226
+25; true; 0.137936
+13; true; 0.11324
+23; true; 0.0669889
+19; true; 0.0393229
+29; true; 0.0307456
+21; true; 0.0151973
+18; true; 0.00249992
+# FractureId; NumTraces
+4; 11
+# TraceId; Tips; Length
+41; true; 1.80186
+39; true; 1.478
+37; true; 0.86327
+40; true; 0.732273
+36; true; 0.628376
+35; true; 0.542141
+12; true; 0.421288
+43; true; 0.408308
+38; true; 0.294568
+34; true; 0.11324
+42; true; 0.0307456
+# FractureId; NumTraces
+5; 4
+# TraceId; Tips; Length
+44; true; 0.628376
+47; true; 0.408308
+45; true; 0.0393229
+46; true; 0.0151973
+# FractureId; NumTraces
+6; 5
+# TraceId; Tips; Length
+48; true; 0.651424
+49; true; 0.400206
+8; true; 0.28193
+50; true; 0.125243
+51; true; 0.098768
+# FractureId; NumTraces
+7; 5
+# TraceId; Tips; Length
+52; true; 0.628376
+53; true; 0.457869
+56; true; 0.284714
+54; true; 0.125243
+55; true; 0.098768
+# FractureId; NumTraces
+8; 8
+# TraceId; Tips; Length
+63; true; 0.970955
+48; true; 0.651424
+57; true; 0.400206
+58; true; 0.391613
+60; true; 0.294568
+62; true; 0.284714
+61; true; 0.125243
+59; true; 0.00249992
+# FractureId; NumTraces
+9; 17
+# TraceId; Tips; Length
+74; true; 1.80186
+70; true; 1.478
+69; true; 0.95414
+66; true; 0.86327
+73; true; 0.732273
+64; true; 0.628376
+65; true; 0.457869
+77; true; 0.408308
+78; true; 0.299866
+72; true; 0.284714
+76; true; 0.232226
+71; true; 0.137936
+13; true; 0.11324
+34; true; 0.11324
+67; true; 0.0393229
+75; true; 0.0307456
+68; true; 0.0151973
+# FractureId; NumTraces
+10; 3
+# TraceId; Tips; Length
+80; true; 0.86327
+79; true; 0.628376
+81; true; 0.0151973
+# FractureId; NumTraces
+11; 7
+# TraceId; Tips; Length
+83; true; 0.628376
+87; true; 0.531779
+85; true; 0.457869
+82; true; 0.400206
+84; true; 0.391613
+88; true; 0.284714
+86; true; 0.125243
+# FractureId; NumTraces
+12; 16
+# TraceId; Tips; Length
+99; true; 0.970955
+93; true; 0.86327
+90; true; 0.628376
+89; true; 0.542141
+92; true; 0.457869
+100; true; 0.408308
+49; true; 0.400206
+57; true; 0.400206
+82; true; 0.400206
+91; true; 0.364264
+101; true; 0.299866
+96; true; 0.294568
+98; true; 0.284714
+95; true; 0.0393229
+97; true; 0.0151973
+94; true; 0.00249992
+# FractureId; NumTraces
+13; 15
+# TraceId; Tips; Length
+103; true; 1.5529
+110; true; 1.12511
+111; true; 0.948815
+105; true; 0.86327
+102; true; 0.628376
+14; true; 0.542141
+35; true; 0.542141
+89; true; 0.542141
+104; true; 0.364264
+113; true; 0.299866
+108; true; 0.294568
+112; true; 0.284714
+107; true; 0.0393229
+109; true; 0.0151973
+106; true; 0.00249992
+# FractureId; NumTraces
+14; 32
+# TraceId; Tips; Length
+128; true; 2.20365
+114; true; 1.5529
+125; true; 1.478
+123; true; 1.12511
+124; true; 0.948815
+117; true; 0.86327
+130; true; 0.732273
+64; true; 0.628376
+83; true; 0.628376
+90; true; 0.628376
+102; true; 0.628376
+44; true; 0.628376
+9; true; 0.628376
+52; true; 0.628376
+6; true; 0.628376
+15; true; 0.628376
+36; true; 0.628376
+79; true; 0.628376
+116; true; 0.457869
+133; true; 0.408308
+115; true; 0.364264
+134; true; 0.299866
+121; true; 0.294568
+129; true; 0.284714
+132; true; 0.232226
+119; true; 0.17997
+126; true; 0.137936
+127; true; 0.098768
+120; true; 0.0393229
+131; true; 0.0307456
+122; true; 0.0151973
+118; true; 0.00249992
+# FractureId; NumTraces
+16; 11
+# TraceId; Tips; Length
+103; true; 1.5529
+114; true; 1.5529
+141; true; 1.12511
+142; true; 0.948815
+136; true; 0.86327
+143; true; 0.408308
+135; true; 0.364264
+139; true; 0.294568
+138; true; 0.0393229
+140; true; 0.0151973
+137; true; 0.00249992
+# FractureId; NumTraces
+18; 1
+# TraceId; Tips; Length
+144; true; 0.284714
+# FractureId; NumTraces
+20; 5
+# TraceId; Tips; Length
+145; true; 0.457869
+58; true; 0.391613
+84; true; 0.391613
+146; true; 0.125243
+147; true; 0.098768
+# FractureId; NumTraces
+21; 17
+# TraceId; Tips; Length
+155; true; 2.20365
+158; true; 1.80186
+154; true; 1.478
+153; true; 1.12511
+149; true; 0.86327
+157; true; 0.732273
+148; true; 0.457869
+160; true; 0.408308
+104; true; 0.364264
+135; true; 0.364264
+115; true; 0.364264
+91; true; 0.364264
+156; true; 0.284714
+152; true; 0.125243
+150; true; 0.0393229
+159; true; 0.0307456
+151; true; 0.0151973
+# FractureId; NumTraces
+22; 24
+# TraceId; Tips; Length
+166; true; 1.478
+175; true; 1.28274
+161; true; 0.86327
+170; true; 0.732273
+168; true; 0.531779
+16; true; 0.457869
+148; true; 0.457869
+65; true; 0.457869
+145; true; 0.457869
+92; true; 0.457869
+116; true; 0.457869
+1; true; 0.457869
+53; true; 0.457869
+85; true; 0.457869
+173; true; 0.408308
+174; true; 0.299866
+169; true; 0.284714
+172; true; 0.232226
+162; true; 0.17997
+167; true; 0.137936
+165; true; 0.125243
+163; true; 0.0393229
+171; true; 0.0307456
+164; true; 0.0151973
+# FractureId; NumTraces
+23; 25
+# TraceId; Tips; Length
+186; true; 2.20365
+181; true; 1.12511
+184; true; 1.09965
+182; true; 0.948815
+117; true; 0.86327
+37; true; 0.86327
+66; true; 0.86327
+93; true; 0.86327
+105; true; 0.86327
+136; true; 0.86327
+149; true; 0.86327
+161; true; 0.86327
+17; true; 0.86327
+80; true; 0.86327
+189; true; 0.408308
+190; true; 0.299866
+178; true; 0.294568
+187; true; 0.284714
+183; true; 0.137936
+180; true; 0.125243
+185; true; 0.098768
+177; true; 0.0393229
+188; true; 0.0307456
+179; true; 0.0151973
+176; true; 0.00249992
+# FractureId; NumTraces
+24; 12
+# TraceId; Tips; Length
+195; true; 0.408308
+192; true; 0.294568
+194; true; 0.284714
+193; true; 0.137936
+191; true; 0.0393229
+18; true; 0.00249992
+137; true; 0.00249992
+94; true; 0.00249992
+118; true; 0.00249992
+59; true; 0.00249992
+106; true; 0.00249992
+176; true; 0.00249992
+# FractureId; NumTraces
+25; 5
+# TraceId; Tips; Length
+198; true; 1.28274
+197; true; 0.232226
+119; true; 0.17997
+162; true; 0.17997
+196; true; 0.0669889
+# FractureId; NumTraces
+27; 24
+# TraceId; Tips; Length
+204; true; 2.20365
+202; true; 1.478
+201; true; 1.12511
+209; true; 0.970955
+206; true; 0.732273
+210; true; 0.408308
+211; true; 0.299866
+199; true; 0.294568
+205; true; 0.284714
+208; true; 0.232226
+203; true; 0.137936
+177; true; 0.0393229
+120; true; 0.0393229
+19; true; 0.0393229
+163; true; 0.0393229
+95; true; 0.0393229
+191; true; 0.0393229
+67; true; 0.0393229
+138; true; 0.0393229
+107; true; 0.0393229
+45; true; 0.0393229
+150; true; 0.0393229
+207; true; 0.0307456
+200; true; 0.0151973
+# FractureId; NumTraces
+28; 13
+# TraceId; Tips; Length
+214; true; 0.408308
+38; true; 0.294568
+60; true; 0.294568
+20; true; 0.294568
+121; true; 0.294568
+139; true; 0.294568
+192; true; 0.294568
+199; true; 0.294568
+96; true; 0.294568
+108; true; 0.294568
+178; true; 0.294568
+213; true; 0.284714
+212; true; 0.137936
+# FractureId; NumTraces
+29; 21
+# TraceId; Tips; Length
+215; true; 1.12511
+217; true; 1.09965
+220; true; 0.732273
+222; true; 0.408308
+219; true; 0.284714
+216; true; 0.137936
+218; true; 0.098768
+221; true; 0.0307456
+109; true; 0.0151973
+164; true; 0.0151973
+81; true; 0.0151973
+200; true; 0.0151973
+21; true; 0.0151973
+140; true; 0.0151973
+7; true; 0.0151973
+68; true; 0.0151973
+97; true; 0.0151973
+151; true; 0.0151973
+122; true; 0.0151973
+46; true; 0.0151973
+179; true; 0.0151973
+# FractureId; NumTraces
+30; 4
+# TraceId; Tips; Length
+224; true; 1.478
+69; true; 0.95414
+225; true; 0.232226
+223; true; 0.0669889
+# FractureId; NumTraces
+31; 12
+# TraceId; Tips; Length
+227; true; 0.531779
+2; true; 0.125243
+86; true; 0.125243
+165; true; 0.125243
+61; true; 0.125243
+152; true; 0.125243
+180; true; 0.125243
+54; true; 0.125243
+50; true; 0.125243
+10; true; 0.125243
+146; true; 0.125243
+226; true; 0.098768
+# FractureId; NumTraces
+32; 11
+# TraceId; Tips; Length
+22; true; 1.12511
+110; true; 1.12511
+123; true; 1.12511
+141; true; 1.12511
+153; true; 1.12511
+201; true; 1.12511
+215; true; 1.12511
+181; true; 1.12511
+228; true; 0.948815
+230; true; 0.408308
+229; true; 0.137936
+# FractureId; NumTraces
+33; 7
+# TraceId; Tips; Length
+111; true; 0.948815
+124; true; 0.948815
+142; true; 0.948815
+182; true; 0.948815
+228; true; 0.948815
+232; true; 0.408308
+231; true; 0.137936
+# FractureId; NumTraces
+34; 6
+# TraceId; Tips; Length
+234; true; 1.80186
+233; true; 1.478
+235; true; 0.232226
+223; true; 0.0669889
+196; true; 0.0669889
+23; true; 0.0669889
+# FractureId; NumTraces
+35; 15
+# TraceId; Tips; Length
+238; true; 1.80186
+24; true; 1.478
+39; true; 1.478
+70; true; 1.478
+154; true; 1.478
+166; true; 1.478
+202; true; 1.478
+224; true; 1.478
+233; true; 1.478
+125; true; 1.478
+241; true; 1.28274
+237; true; 0.732273
+240; true; 0.408308
+239; true; 0.232226
+236; true; 0.098768
+# FractureId; NumTraces
+36; 13
+# TraceId; Tips; Length
+243; true; 0.408308
+242; true; 0.284714
+212; true; 0.137936
+183; true; 0.137936
+229; true; 0.137936
+231; true; 0.137936
+71; true; 0.137936
+203; true; 0.137936
+167; true; 0.137936
+25; true; 0.137936
+193; true; 0.137936
+216; true; 0.137936
+126; true; 0.137936
+# FractureId; NumTraces
+37; 3
+# TraceId; Tips; Length
+217; true; 1.09965
+184; true; 1.09965
+244; true; 0.284714
+# FractureId; NumTraces
+38; 12
+# TraceId; Tips; Length
+245; true; 0.531779
+247; true; 0.408308
+246; true; 0.284714
+51; true; 0.098768
+3; true; 0.098768
+55; true; 0.098768
+236; true; 0.098768
+147; true; 0.098768
+185; true; 0.098768
+218; true; 0.098768
+226; true; 0.098768
+127; true; 0.098768
+# FractureId; NumTraces
+39; 5
+# TraceId; Tips; Length
+4; true; 0.531779
+87; true; 0.531779
+168; true; 0.531779
+227; true; 0.531779
+245; true; 0.531779
+# FractureId; NumTraces
+40; 4
+# TraceId; Tips; Length
+128; true; 2.20365
+186; true; 2.20365
+204; true; 2.20365
+155; true; 2.20365
+# FractureId; NumTraces
+41; 23
+# TraceId; Tips; Length
+248; true; 0.732273
+251; true; 0.408308
+244; true; 0.284714
+98; true; 0.284714
+187; true; 0.284714
+246; true; 0.284714
+213; true; 0.284714
+205; true; 0.284714
+194; true; 0.284714
+88; true; 0.284714
+72; true; 0.284714
+62; true; 0.284714
+156; true; 0.284714
+169; true; 0.284714
+129; true; 0.284714
+112; true; 0.284714
+219; true; 0.284714
+242; true; 0.284714
+56; true; 0.284714
+26; true; 0.284714
+144; true; 0.284714
+250; true; 0.232226
+249; true; 0.0307456
+# FractureId; NumTraces
+42; 14
+# TraceId; Tips; Length
+252; true; 1.80186
+130; true; 0.732273
+237; true; 0.732273
+27; true; 0.732273
+40; true; 0.732273
+73; true; 0.732273
+157; true; 0.732273
+170; true; 0.732273
+206; true; 0.732273
+220; true; 0.732273
+248; true; 0.732273
+254; true; 0.408308
+255; true; 0.299866
+253; true; 0.232226
+# FractureId; NumTraces
+43; 8
+# TraceId; Tips; Length
+28; true; 1.80186
+41; true; 1.80186
+74; true; 1.80186
+158; true; 1.80186
+234; true; 1.80186
+252; true; 1.80186
+238; true; 1.80186
+256; true; 0.232226
+# FractureId; NumTraces
+44; 12
+# TraceId; Tips; Length
+257; true; 0.408308
+258; true; 0.299866
+159; true; 0.0307456
+29; true; 0.0307456
+221; true; 0.0307456
+207; true; 0.0307456
+249; true; 0.0307456
+75; true; 0.0307456
+42; true; 0.0307456
+171; true; 0.0307456
+188; true; 0.0307456
+131; true; 0.0307456
+# FractureId; NumTraces
+45; 14
+# TraceId; Tips; Length
+260; true; 1.28274
+259; true; 0.408308
+30; true; 0.232226
+239; true; 0.232226
+172; true; 0.232226
+76; true; 0.232226
+132; true; 0.232226
+197; true; 0.232226
+208; true; 0.232226
+235; true; 0.232226
+250; true; 0.232226
+253; true; 0.232226
+256; true; 0.232226
+225; true; 0.232226
+# FractureId; NumTraces
+46; 3
+# TraceId; Tips; Length
+63; true; 0.970955
+99; true; 0.970955
+209; true; 0.970955
+# FractureId; NumTraces
+47; 24
+# TraceId; Tips; Length
+254; true; 0.408308
+232; true; 0.408308
+43; true; 0.408308
+259; true; 0.408308
+257; true; 0.408308
+251; true; 0.408308
+243; true; 0.408308
+222; true; 0.408308
+214; true; 0.408308
+210; true; 0.408308
+195; true; 0.408308
+189; true; 0.408308
+173; true; 0.408308
+160; true; 0.408308
+133; true; 0.408308
+100; true; 0.408308
+77; true; 0.408308
+47; true; 0.408308
+31; true; 0.408308
+143; true; 0.408308
+230; true; 0.408308
+247; true; 0.408308
+240; true; 0.408308
+261; true; 0.299866
+# FractureId; NumTraces
+48; 11
+# TraceId; Tips; Length
+134; true; 0.299866
+190; true; 0.299866
+258; true; 0.299866
+261; true; 0.299866
+32; true; 0.299866
+78; true; 0.299866
+101; true; 0.299866
+174; true; 0.299866
+211; true; 0.299866
+255; true; 0.299866
+113; true; 0.299866
+# FractureId; NumTraces
+49; 6
+# TraceId; Tips; Length
+33; true; 1.28274
+175; true; 1.28274
+11; true; 1.28274
+198; true; 1.28274
+241; true; 1.28274
+260; true; 1.28274

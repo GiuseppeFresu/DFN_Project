@@ -48,7 +48,12 @@ class Utils {
 
 TestImportFractures
 TestCheckIntersections
-    }
+TestCalculateTraces
+TestWriteTraces
+TestSortTracesByLength
+TestWriteResults
+
+}
 
     Trace "2"--o "many" Fractures : has
 

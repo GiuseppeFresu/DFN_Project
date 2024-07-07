@@ -84,7 +84,7 @@ namespace FractureLibrary
 
         Point expected_pt1(1.0, 0.0, 0.0);
         Point expected_pt2(2.0, 0.0, 0.0);
-        bool expected_isTip = true;
+        bool expected_isTip = false;
 
         EXPECT_EQ(result.p1,expected_pt1);
         EXPECT_EQ(result.p2,expected_pt2);

@@ -120,6 +120,36 @@ namespace FractureLibrary
 
         remove(filename.c_str());
     }
+     TEST(FRACTURETEST, TestCalculateTraces)
+    {
+        Fractures fractures;
+        Matrix3Xd P(3, 4);
+        P << -2, -2, 2, 2,
+             -2, 2, 2, -2,
+             0, 0, 0, 0;
+
+        Matrix3Xd Q(3,4);
+        Q << 0, 0, 0, 0,
+             -1, -1, 1, 1,
+             -1, 1, 1, -1;
+
+        int id1 = 1;
+        int id2 = 2;
+        int traceId = 0;
+        double epsilon = 0.000000001;
+
+        Trace trace = calculateTrace(P, Q, id1, id2, traceId, epsilon);
+        EXPECT_EQ(trace.traceId, 0);
+        EXPECT_EQ(trace.fractureId1, 1);
+        EXPECT_EQ(trace.fractureId2, 2);
+        EXPECT_EQ(trace.Tips, false);
+
+        Point expectedP1(0, -1, 0);
+        Point expectedP2(0, 1, 0);
+        EXPECT_TRUE((trace.p1.x == expectedP1.x) && (trace.p1.y == expectedP1.y) && (trace.p1.z == expectedP1.z));
+        EXPECT_TRUE((trace.p2.x == expectedP2.x) && (trace.p2.y == expectedP2.y) && (trace.p2.z == expectedP2.z));
+    }
+
 
     TEST(FRACTURESTEST, SortTracesByLength)
     {

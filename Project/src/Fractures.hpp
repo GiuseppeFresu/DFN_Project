@@ -10,7 +10,12 @@ namespace FractureLibrary
 {
     struct Point
     {
-        double x, y, z;
+        double x;
+        double y;
+        double z;
+
+        Point() : x(0), y(0), z(0) {}
+        Point(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
     };
 
     struct Trace

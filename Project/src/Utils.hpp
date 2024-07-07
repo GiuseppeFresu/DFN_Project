@@ -30,10 +30,13 @@ namespace FractureLibrary
 
    bool checkSeparation(const Matrix3Xd& P, const Matrix3Xd& Q);
 
-   bool isPointOnEdge(const Point& pt, const Matrix3Xd& vertices);
+   bool intersectPlanes(const Matrix3Xd& vertices1, const Matrix3Xd& vertices2,
+                        Vector3d& pt1, Vector3d& pt2);
 
-   Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q,
-                        int id1, int id2, int& traceId);
+   bool isPointOnEdges(const Matrix3Xd& points, const Vector3d& pt, double epsilon);
+
+   Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2,
+                        int& traceId, double epsilon);
 
    void checkIntersections(Fractures& fractures, map<int,
                            vector<int>>& intersections);
@@ -46,4 +49,4 @@ namespace FractureLibrary
    void writeResults(const Fractures& fractures,
                                  const string& filename);
 
-}
+ }

@@ -111,67 +111,67 @@ namespace FractureLibrary
 // ***************************************************************************
 
     bool intersection2D(const vector<pair<double, double>>& P,
-                        const vector<pair<double, double>>& Q)
-    {
-        auto getEdges = [](const vector<pair<double, double>>& poly)
+                            const vector<pair<double, double>>& Q)
         {
-            vector<pair<double, double>> edges(poly.size());
-            for (size_t i = 0; i < poly.size(); i++)
+            auto getEdges = [](const vector<pair<double, double>>& poly)
             {
-                size_t j = (i + 1) % poly.size();
-                edges[i] = {poly[j].first - poly[i].first,
-                            poly[j].second - poly[i].second};
-            }
-            return edges;
-        };
+                vector<pair<double, double>> edges(poly.size());
+                for (size_t i = 0; i < poly.size(); i++)
+                {
+                    size_t j = (i + 1) % poly.size();
+                    edges[i] = {poly[j].first - poly[i].first,
+                                poly[j].second - poly[i].second};
+                }
+                return edges;
+            };
 
-        auto getNormals = [](const vector<pair<double, double>>& edges)
-        {
-            vector<pair<double, double>> normals(edges.size());
-            for (size_t i = 0; i < edges.size(); i++)
+            auto getNormals = [](const vector<pair<double, double>>& edges)
             {
-                normals[i] = {-edges[i].second, edges[i].first};
-            }
-            return normals;
-        };
+                vector<pair<double, double>> normals(edges.size());
+                for (size_t i = 0; i < edges.size(); i++)
+                {
+                    normals[i] = {-edges[i].second, edges[i].first};
+                }
+                return normals;
+            };
 
-        auto project = [](const vector<pair<double, double>>& poly,
-                          const pair<double, double>& axis)
-        {
-            double min = poly[0].first * axis.first + poly[0].second * axis.second;
-            double max = min;
-            for (const auto& point : poly)
+            auto project = [](const vector<pair<double, double>>& poly,
+                              const pair<double, double>& axis)
             {
-                double projection = point.first * axis.first + point.second * axis.second;
-                if (projection < min) min = projection;
-                if (projection > max) max = projection;
+                double min = poly[0].first * axis.first + poly[0].second * axis.second;
+                double max = min;
+                for (const auto& point : poly)
+                {
+                    double projection = point.first * axis.first + point.second * axis.second;
+                    if (projection < min) min = projection;
+                    if (projection > max) max = projection;
+                }
+                return make_pair(min, max);
+            };
+
+            auto overlap = [](const pair<double, double>& p1,
+                              const pair<double, double>& p2)
+            {
+                return !(p1.second + epsilon < p2.first || p2.second + epsilon < p1.first);
+            };
+
+            vector<pair<double, double>> edgesP = getEdges(P);
+            vector<pair<double, double>> edgesQ = getEdges(Q);
+            vector<pair<double, double>> normalsP = getNormals(edgesP);
+            vector<pair<double, double>> normalsQ = getNormals(edgesQ);
+
+            for (const auto& axis : normalsP)
+            {
+                if (!overlap(project(P, axis), project(Q, axis))) return false;
             }
-            return make_pair(min, max);
-        };
 
-        auto overlap = [](const pair<double, double>& p1,
-                          const pair<double, double>& p2)
-        {
-            return !(p1.second + epsilon < p2.first || p2.second + epsilon < p1.first);
-        };
+            for (const auto& axis : normalsQ)
+            {
+                if (!overlap(project(P, axis), project(Q, axis))) return false;
+            }
 
-        vector<pair<double, double>> edgesP = getEdges(P);
-        vector<pair<double, double>> edgesQ = getEdges(Q);
-        vector<pair<double, double>> normalsP = getNormals(edgesP);
-        vector<pair<double, double>> normalsQ = getNormals(edgesQ);
-
-        for (const auto& axis : normalsP)
-        {
-            if (!overlap(project(P, axis), project(Q, axis))) return false;
+            return true;
         }
-
-        for (const auto& axis : normalsQ)
-        {
-            if (!overlap(project(P, axis), project(Q, axis))) return false;
-        }
-
-        return true;
-    }
 
 // ***************************************************************************
 
@@ -205,40 +205,37 @@ namespace FractureLibrary
 
 // ***************************************************************************
 
-    bool  checkSeparation(const Matrix3Xd& P, const Matrix3Xd& Q)
+    bool checkSeparation(const Matrix3Xd& P, const Matrix3Xd& Q)
     {
-        for (int i = 0; i < P.cols(); i++)
+        auto calculateNormal = [](const Vector3d& p1, const Vector3d& p2)
         {
-            Vector3d normalP = P.col(i).cross(P.col((i + 1) % P.cols()));
-            bool separateP = true;
+            return p1.cross(p2);
+        };
 
-            for (int j = 0; j < Q.cols(); j++)
-            {
-                if (normalP.dot(Q.col(j) - P.col(i)) <= epsilon)
-                {
-                    separateP = false;
-                    break;
-                }
-            }
-
-            if (separateP) return true;
-        }
-
-        for (int i = 0; i < Q.cols(); i++)
+        auto isSeparated = [&](const Matrix3Xd& A, const Matrix3Xd& B)
         {
-            Vector3d normalQ = Q.col(i).cross(Q.col((i + 1) % Q.cols()));
-            bool separateQ = true;
-
-            for (int j = 0; j < P.cols(); j++)
+            for (int i = 0; i < A.cols(); i++)
             {
-                if (normalQ.dot(P.col(j) - Q.col(i)) <= epsilon)
-                {
-                    separateQ = false;
-                    break;
-                }
-            }
+                Vector3d normal = calculateNormal(A.col(i), A.col((i + 1) % A.cols()));
+                bool separate = true;
 
-            if (separateQ) return true;
+                for (int j = 0; j < B.cols(); j++)
+                {
+                    if (normal.dot(B.col(j) - A.col(i)) <= epsilon)
+                    {
+                        separate = false;
+                        break;
+                    }
+                }
+
+                if (separate) return true;
+            }
+            return false;
+        };
+
+        if (isSeparated(P, Q) || isSeparated(Q, P))
+        {
+            return true;
         }
 
         return false;
@@ -246,82 +243,83 @@ namespace FractureLibrary
 
 // ***************************************************************************
 
-    bool isPointOnEdge(const Point& pt, const Matrix3Xd& vertices)
+    bool intersectPlanes(const Matrix3Xd& vertices1, const Matrix3Xd& vertices2,
+                         Vector3d& pt1, Vector3d& pt2)
     {
-        for (int i = 0; i < vertices.cols(); ++i)
-        {
-            Vector3d p1 = vertices.col(i);
-            Vector3d p2 = vertices.col((i + 1) % vertices.cols());
+        Hyperplane<double, 3> plane1 = Hyperplane<double, 3>::Through(vertices1.col(0),
+                                                                      vertices1.col(1),
+                                                                      vertices1.col(2));
+        Hyperplane<double, 3> plane2 = Hyperplane<double, 3>::Through(vertices2.col(0),
+                                                                      vertices2.col(1),
+                                                                      vertices2.col(2));
 
-            Vector3d v1(pt.x - p1.x(), pt.y - p1.y(), pt.z - p1.z());
-            Vector3d v2(p2.x() - p1.x(), p2.y() - p1.y(), p2.z() - p1.z());
-            Vector3d crossProduct = v1.cross(v2);
-            if (crossProduct.norm() < epsilon)
+        Vector3d normal1 = plane1.normal();
+        Vector3d normal2 = plane2.normal();
+
+        if (normal1.cross(normal2).norm() < epsilon)
+        {
+            return false;
+        }
+
+        Vector3d direction = normal1.cross(normal2);
+        double denom = direction.dot(direction);
+
+        Vector3d pointOnPlane1 = plane1.normal() * (-plane1.offset());
+        Vector3d pointOnPlane2 = plane2.normal() * (-plane2.offset());
+
+        double t1 = (pointOnPlane2 - pointOnPlane1).dot(normal2.cross(direction)) / denom;
+        pt1 = pointOnPlane1 + t1 * normal1;
+
+        double t2 = (pointOnPlane1 - pointOnPlane2).dot(normal1.cross(direction)) / denom;
+        pt2 = pointOnPlane2 + t2 * normal2;
+
+        return true;
+    }
+
+// ***************************************************************************
+
+    bool isPointOnEdges(const Matrix3Xd& points, const Vector3d& pt, double epsilon)
+    {
+        int numVertices = points.cols();
+        for (int i = 0; i < numVertices; ++i)
+        {
+            int next = (i + 1) % numVertices;
+
+            Vector3d edge = points.col(next) - points.col(i);
+            Vector3d toPt = pt - points.col(i);
+
+            double t = toPt.dot(edge) / edge.squaredNorm();
+
+            if (t >= 0 && t <= 1)
             {
-                double dotProduct = v1.dot(v2);
-                if (dotProduct >= 0 && dotProduct <= v2.squaredNorm())
+                Vector3d projection = points.col(i) + t * edge;
+                if ((projection - pt).norm() < epsilon)
                 {
                     return true;
                 }
             }
         }
-
         return false;
     }
 
 // ***************************************************************************
 
-    Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q,
-                     int id1, int id2, int& traceId)
+    Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2,
+                         int& traceId, double epsilon)
     {
-        vector<Point> intersectionPoints;
+        Vector3d pt1, pt2;
 
-        for (int i = 0; i < P.cols(); i++)
+        if (intersectPlanes(P, Q, pt1, pt2))
         {
-            Vector3d p1 = P.col(i);
-            Vector3d p2 = P.col((i + 1) % P.cols());
+            bool pt1OnEdges = isPointOnEdges(P, pt1, epsilon);
+            bool pt2OnEdges = isPointOnEdges(P, pt2, epsilon);
 
-            for (int j = 0; j < Q.cols(); j++)
-            {
-                Vector3d q1 = Q.col(j);
-                Vector3d q2 = Q.col((j + 1) % Q.cols());
+            bool tips = !(pt1OnEdges && pt2OnEdges);
 
-                Vector3d dir1 = p2 - p1;
-                Vector3d dir2 = q2 - q1;
-                Vector3d cross_dir = dir1.cross(dir2);
-                double det = cross_dir.norm();
-
-                if (det > epsilon)
-                {
-                    Vector3d pq = q1 - p1;
-                    double t1 = pq.cross(dir2).norm() / det;
-                    double t2 = pq.cross(dir1).norm() / det;
-
-                    if (t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1)
-                    {
-                        Vector3d intersection = p1 + t1 * dir1;
-                        intersectionPoints.push_back({intersection.x(),
-                                                      intersection.y(),
-                                                      intersection.z()});
-                    }
-                }
-            }
+            return Trace(traceId++, id1, id2, {pt1.x(), pt1.y(), pt1.z()}, {pt2.x(), pt2.y(), pt2.z()}, tips);
         }
 
-        if (intersectionPoints.size() < 2)
-        {
-            throw runtime_error("Non sufficient intersection points to form a trace.");
-        }
-
-        Point pt1 = intersectionPoints[0];
-        Point pt2 = intersectionPoints[1];
-
-        bool isPt1OnP = isPointOnEdge(pt1, P);
-        bool isPt2OnP = isPointOnEdge(pt2, P);
-
-        bool Tips = !(isPt1OnP && isPt2OnP);
-
-        return Trace(traceId++, id1, id2, pt1, pt2, Tips);
+        throw runtime_error("Intersection computation failed between fractures");
     }
 
 // ***************************************************************************
@@ -374,7 +372,7 @@ namespace FractureLibrary
 
                         try
                         {
-                            Trace trace = calculateTrace(P, Q, id1, id2, traceId);
+                            Trace trace = calculateTrace(P, Q, id1, id2, traceId, epsilon);
                             {
                                 fractures.Traces.push_back(trace);
                             }

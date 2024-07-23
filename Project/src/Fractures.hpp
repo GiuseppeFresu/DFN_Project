@@ -25,7 +25,6 @@ namespace FractureLibrary
         int fractureId2;
         Point p1;
         Point p2;
-
         double length;
 
         Trace(int id, int f1, int f2, Point pt1, Point pt2)

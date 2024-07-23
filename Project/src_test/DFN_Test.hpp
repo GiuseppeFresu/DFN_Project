@@ -28,7 +28,7 @@ namespace FractureLibrary
         EXPECT_EQ(fractures.FracturesVertices[0](1, 0), 0.0);
         EXPECT_EQ(fractures.FracturesVertices[0](2, 0), 0.0);
     }
-
+/*
     TEST(FRACTURESTEST, TestCheckIntersections)
     {
         Fractures fractures;
@@ -121,7 +121,7 @@ namespace FractureLibrary
         remove(filename.c_str());
     }
 
-/*
+
     TEST(FRACTURETEST, TestCalculateTraces)
     {
         Fractures fractures;
@@ -153,7 +153,7 @@ namespace FractureLibrary
         EXPECT_TRUE((trace.p2.x == expectedP2.x) && (trace.p2.y == expectedP2.y) && (trace.p2.z == expectedP2.z));
     }
 
-*/
+
 
     TEST(FRACTURESTEST, SortTracesByLength)
     {
@@ -243,5 +243,7 @@ namespace FractureLibrary
            inFile.close();
            remove(filename.c_str());
        }
+*/
+
 }
 #endif

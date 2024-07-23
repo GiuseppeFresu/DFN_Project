@@ -7,7 +7,7 @@
 namespace FractureLibrary
 {
 
-    const double epsilon = numeric_limits<double>::epsilon();
+    const double epsilon = 1e-12;
 
 // ***************************************************************************
 
@@ -207,31 +207,45 @@ namespace FractureLibrary
 
     bool checkSeparation(const Matrix3Xd& P, const Matrix3Xd& Q)
     {
-        auto calculateNormal = [](const Vector3d& p1, const Vector3d& p2)
-        {
-            return p1.cross(p2);
-        };
+           auto calculateNormal = [](const Vector3d& p1, const Vector3d& p2)
+           {
+               Vector3d normal = p1.cross(p2);
+               return normal.normalized();
+           };
 
-        auto isSeparated = [&](const Matrix3Xd& A, const Matrix3Xd& B)
-        {
-            for (int i = 0; i < A.cols(); i++)
-            {
-                Vector3d normal = calculateNormal(A.col(i), A.col((i + 1) % A.cols()));
-                bool separate = true;
+           auto isSeparated = [&](const Matrix3Xd& A, const Matrix3Xd& B)
+           {
+               for (int i = 0; i < A.cols(); i++)
+               {
+                   Vector3d normal = calculateNormal(A.col(i), A.col((i + 1) % A.cols()));
 
-                for (int j = 0; j < B.cols(); j++)
-                {
-                    if (normal.dot(B.col(j) - A.col(i)) <= epsilon)
-                    {
-                        separate = false;
-                        break;
-                    }
-                }
 
-                if (separate) return true;
-            }
-            return false;
-        };
+                   double minA = normal.dot(A.col(0));
+                   double maxA = minA;
+                   for (int j = 1; j < A.cols(); j++)
+                   {
+                       double projection = normal.dot(A.col(j));
+                       if (projection < minA) minA = projection;
+                       if (projection > maxA) maxA = projection;
+                   }
+
+                   double minB = normal.dot(B.col(0));
+                   double maxB = minB;
+                   for (int j = 1; j < B.cols(); j++)
+                   {
+                       double projection = normal.dot(B.col(j));
+                       if (projection < minB) minB = projection;
+                       if (projection > maxB) maxB = projection;
+                   }
+
+                   if (maxA < minB - epsilon || maxB < minA - epsilon)
+                   {
+                       return true;
+                   }
+               }
+
+               return false;
+           };
 
         if (isSeparated(P, Q) || isSeparated(Q, P))
         {
@@ -304,21 +318,14 @@ namespace FractureLibrary
 
 // ***************************************************************************
 
-    Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2,
-                         int& traceId, double epsilon)
+    Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2, int& traceId)
     {
         Vector3d pt1, pt2;
 
         if (intersectPlanes(P, Q, pt1, pt2))
         {
-            bool pt1OnEdges = isPointOnEdges(P, pt1, epsilon);
-            bool pt2OnEdges = isPointOnEdges(P, pt2, epsilon);
-
-            bool tips = !(pt1OnEdges && pt2OnEdges);
-
-            return Trace(traceId++, id1, id2, {pt1.x(), pt1.y(), pt1.z()}, {pt2.x(), pt2.y(), pt2.z()}, tips);
+            return Trace(traceId++, id1, id2, {pt1.x(), pt1.y(), pt1.z()}, {pt2.x(), pt2.y(), pt2.z()});
         }
-
         throw runtime_error("Intersection computation failed between fractures");
     }
 
@@ -372,11 +379,11 @@ namespace FractureLibrary
 
                         try
                         {
-                            Trace trace = calculateTrace(P, Q, id1, id2, traceId, epsilon);
-                            {
-                                fractures.Traces.push_back(trace);
-                            }
+                            Trace trace = calculateTrace(P, Q, id1, id2, traceId);
+
+                            fractures.Traces.push_back(trace);
                         }
+
                         catch (const exception& e)
                         {
                             {
@@ -389,7 +396,6 @@ namespace FractureLibrary
             }
         }
     }
-
 
 // ***************************************************************************
 
@@ -433,63 +439,85 @@ namespace FractureLibrary
 
 // ***************************************************************************
 
-    void writeResults(const Fractures& fractures, const string& filename)
-    {
-        map<int, vector<Trace>> passing;
-        map<int, vector<Trace>> non_passing;
 
-        for (const auto& trace : fractures.Traces)
+    void writeResults(const Fractures& fractures, const string& filename)
+        {
+            map<int, vector<Trace>> non_passing;
+            map<int, vector<Trace>> passing;
+
+            for (const auto& trace : fractures.Traces)
             {
-                if (trace.Tips)
+                bool Tips1 = true;
+                const auto& vertices1 = fractures.FracturesVertices[trace.fractureId1];
+                if (isPointOnEdges(vertices1, Vector3d(trace.p1.x, trace.p1.y, trace.p1.z), epsilon) &&
+                    isPointOnEdges(vertices1, Vector3d(trace.p2.x, trace.p2.y, trace.p2.z), epsilon))
+                {
+                    Tips1 = false;
+                }
+
+                if (Tips1)
                 {
                     non_passing[trace.fractureId1].push_back(trace);
-                    non_passing[trace.fractureId2].push_back(trace);
                 }
                 else
                 {
                     passing[trace.fractureId1].push_back(trace);
+                }
+
+                bool Tips2 = true;
+                const auto& vertices2 = fractures.FracturesVertices[trace.fractureId2];
+                if (isPointOnEdges(vertices2, Vector3d(trace.p1.x, trace.p1.y, trace.p1.z), epsilon) &&
+                    isPointOnEdges(vertices2, Vector3d(trace.p2.x, trace.p2.y, trace.p2.z), epsilon))
+                {
+                    Tips2 = false;
+                }
+
+                if (Tips2)
+                {
+                    non_passing[trace.fractureId2].push_back(trace);
+                }
+                else
+                {
                     passing[trace.fractureId2].push_back(trace);
                 }
             }
-
-        for (auto& entry : passing)
-        {
-            sortTracesByLength(entry.second);
-        }
-        for (auto& entry : non_passing)
-        {
-            sortTracesByLength(entry.second);
-        }
-
-        ofstream outFile(filename);
-        if (!outFile)
-        {
-            cerr << "Failed to open file for writing: " << filename << endl;
-            return;
-        }
-
-        for (const auto& fractureId : fractures.FracturesId)
-        {
-            int numTraces = passing[fractureId].size() + non_passing[fractureId].size();
-
-            if(numTraces != 0)
+            for (auto& entry : passing)
             {
-                outFile << "# FractureId; NumTraces" << endl;
-                outFile << fractureId << "; " << numTraces << endl;
-                outFile << "# TraceId; Tips; Length" << endl;
-                for (const auto& trace : passing[fractureId])
+                sortTracesByLength(entry.second);
+            }
+            for (auto& entry : non_passing)
+            {
+                sortTracesByLength(entry.second);
+            }
+
+            ofstream outFile(filename);
+            if (!outFile)
+            {
+                cerr << "Failed to open file for writing: " << filename << endl;
+                return;
+            }
+
+            outFile << "# FractureId; NumTraces" << endl;
+            for (const auto& fractureId : fractures.FracturesId)
+            {
+                int numTraces = passing[fractureId].size() + non_passing[fractureId].size();
+
+                if (numTraces != 0)
                 {
-                    outFile << trace.traceId << "; " << "false" << "; " << trace.length << endl;
-                }
-                for (const auto& trace : non_passing[fractureId])
-                {
-                    outFile << trace.traceId << "; " << "true" << "; " << trace.length << endl;
+                    outFile << fractureId << "; " << numTraces << endl;
+                    outFile << "# TraceId; Tips; Length" << endl;
+                    for (const auto& trace : passing[fractureId])
+                    {
+                        outFile << trace.traceId << "; " << "false" << "; " << trace.length << endl;
+                    }
+                    for (const auto& trace : non_passing[fractureId])
+                    {
+                        outFile << trace.traceId << "; " << "true" << "; " << trace.length << endl;
+                    }
                 }
             }
-        }
 
-        outFile.close();
-
+            outFile.close();
     }
 
 }

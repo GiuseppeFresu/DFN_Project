@@ -36,7 +36,7 @@ namespace FractureLibrary
    bool isPointOnEdges(const Matrix3Xd& points, const Vector3d& pt, double epsilon);
 
    Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2,
-                        int& traceId, double epsilon);
+                        int& traceId);
 
    void checkIntersections(Fractures& fractures, map<int,
                            vector<int>>& intersections);

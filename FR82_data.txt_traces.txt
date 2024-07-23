@@ -1,4 +1,0 @@
-# Number of Traces
-1
-# TraceId; FractureId1; FractureId2; X1; Y1; Z1; X2; Y2; Z2
-0; 80; 81; -2.46519e-32; 0; -2.46519e-32; 3.14018e-16; -0; -3.14018e-16

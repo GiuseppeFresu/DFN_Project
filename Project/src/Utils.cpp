@@ -447,40 +447,39 @@ namespace FractureLibrary
 
             for (const auto& trace : fractures.Traces)
             {
-                bool Tips1 = true;
-                const auto& vertices1 = fractures.FracturesVertices[trace.fractureId1];
-                if (isPointOnEdges(vertices1, Vector3d(trace.p1.x, trace.p1.y, trace.p1.z), epsilon) &&
-                    isPointOnEdges(vertices1, Vector3d(trace.p2.x, trace.p2.y, trace.p2.z), epsilon))
+                for (int fid = 0; fid < 2; fid++)
                 {
-                    Tips1 = false;
-                }
+                    int fractureId;
+                    if (fid == 0)
+                    {
+                        fractureId = trace.fractureId1;
+                    }
+                    else
+                    {
+                        fractureId = trace.fractureId2;
+                    }
 
-                if (Tips1)
-                {
-                    non_passing[trace.fractureId1].push_back(trace);
-                }
-                else
-                {
-                    passing[trace.fractureId1].push_back(trace);
-                }
+                    const auto& vertices = fractures.FracturesVertices[fractureId];
 
-                bool Tips2 = true;
-                const auto& vertices2 = fractures.FracturesVertices[trace.fractureId2];
-                if (isPointOnEdges(vertices2, Vector3d(trace.p1.x, trace.p1.y, trace.p1.z), epsilon) &&
-                    isPointOnEdges(vertices2, Vector3d(trace.p2.x, trace.p2.y, trace.p2.z), epsilon))
-                {
-                    Tips2 = false;
-                }
+                    bool Tips = true;
+                    if (isPointOnEdges(vertices, Vector3d(trace.p1.x, trace.p1.y, trace.p1.z), epsilon) &&
+                        isPointOnEdges(vertices, Vector3d(trace.p2.x, trace.p2.y, trace.p2.z), epsilon))
+                    {
+                        Tips = false;
+                    }
 
-                if (Tips2)
-                {
-                    non_passing[trace.fractureId2].push_back(trace);
-                }
-                else
-                {
-                    passing[trace.fractureId2].push_back(trace);
+                    if (Tips)
+                    {
+                        non_passing[fractureId].push_back(trace);
+                    }
+                    else
+                    {
+                        passing[fractureId].push_back(trace);
+                    }
                 }
             }
+
+
             for (auto& entry : passing)
             {
                 sortTracesByLength(entry.second);

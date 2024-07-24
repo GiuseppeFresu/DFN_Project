@@ -12,6 +12,7 @@ using namespace std;
 
 namespace FractureLibrary
 {
+
     TEST(FRACTURESTEST, TestImportFractures)
     {
         Fractures fractures;
@@ -28,7 +29,8 @@ namespace FractureLibrary
         EXPECT_EQ(fractures.FracturesVertices[0](1, 0), 0.0);
         EXPECT_EQ(fractures.FracturesVertices[0](2, 0), 0.0);
     }
-/*
+
+
     TEST(FRACTURESTEST, TestCheckIntersections)
     {
         Fractures fractures;
@@ -63,6 +65,7 @@ namespace FractureLibrary
         EXPECT_NE(trace1.fractureId2, trace2.fractureId2);
     }
 
+
     TEST(FRACTURESTEST, TestWriteTraces)
     {
         Fractures fractures;
@@ -74,8 +77,8 @@ namespace FractureLibrary
         Point p3 = {1.1, 1.2, 1.3};
         Point p4 = {1.4, 1.5, 1.6};
 
-        fractures.Traces.emplace_back(0, 0, 1, p1, p2, false);
-        fractures.Traces.emplace_back(1, 0, 1, p3, p4, true);
+        fractures.Traces.emplace_back(0, 0, 1, p1, p2);
+        fractures.Traces.emplace_back(1, 0, 1, p3, p4);
 
         string filename = "test_traces_output.txt";
 
@@ -122,39 +125,6 @@ namespace FractureLibrary
     }
 
 
-    TEST(FRACTURETEST, TestCalculateTraces)
-    {
-        Fractures fractures;
-
-        Matrix3Xd P(3, 4);
-        P << -2, -2, 2, 2,
-             -2, 2, 2, -2,
-             0, 0, 0, 0;
-
-        Matrix3Xd Q(3,4);
-        Q << 0, 0, 0, 0,
-             -1, -1, 1, 1,
-             -1, 1, 1, -1;
-
-        int id1 = 1;
-        int id2 = 2;
-        int traceId = 0;
-        double epsilon = 0.000000001;
-
-        Trace trace = calculateTrace(P, Q, id1, id2, traceId, epsilon);
-        EXPECT_EQ(trace.traceId, 0);
-        EXPECT_EQ(trace.fractureId1, 1);
-        EXPECT_EQ(trace.fractureId2, 2);
-        EXPECT_EQ(trace.Tips, false);
-
-        Point expectedP1(0, -1, 0);
-        Point expectedP2(0, 1, 0);
-        EXPECT_TRUE((trace.p1.x == expectedP1.x) && (trace.p1.y == expectedP1.y) && (trace.p1.z == expectedP1.z));
-        EXPECT_TRUE((trace.p2.x == expectedP2.x) && (trace.p2.y == expectedP2.y) && (trace.p2.z == expectedP2.z));
-    }
-
-
-
     TEST(FRACTURESTEST, SortTracesByLength)
     {
         vector<Trace> traces;
@@ -166,11 +136,11 @@ namespace FractureLibrary
         Point p5 = {4, 0, 0};
         Point p6 = {0, 5, 0};
 
-        traces.emplace_back(0, 0, 1, p1, p2, false);
-        traces.emplace_back(2, 0, 2, p1, p3, true);
-        traces.emplace_back(4, 0, 1, p1, p4, false);
-        traces.emplace_back(3, 1, 2, p1, p5, false);
-        traces.emplace_back(1, 1, 2, p1, p6, true);
+        traces.emplace_back(0, 0, 1, p1, p2);
+        traces.emplace_back(2, 0, 2, p1, p3);
+        traces.emplace_back(4, 0, 1, p1, p4);
+        traces.emplace_back(3, 1, 2, p1, p5);
+        traces.emplace_back(1, 1, 2, p1, p6);
 
         sortTracesByLength(traces);
 
@@ -185,19 +155,91 @@ namespace FractureLibrary
 
     }
 
+    TEST(FRACTURESTEST, TestWriteResults)
+    {
+        // Crea un oggetto Fractures di esempio
+        Fractures fractures;
+        fractures.NumberFractures = 2;
+        fractures.FracturesId = {0, 1};
+
+        Point p1 = {0.1, 0.2, 0.3};
+        Point p2 = {0.4, 0.5, 0.6};
+        Point p3 = {1.1, 1.2, 1.3};
+        Point p4 = {1.4, 1.5, 1.6};
+
+        // Aggiungi tracce
+        fractures.Traces.emplace_back(0, 0, 1, p1, p2);
+        fractures.Traces.emplace_back(1, 1, 0, p3, p4);
+
+        // Fai in modo che tutte le tracce non passino il test (per semplicità)
+        // e supponi che le funzioni isPointOnEdges e sortTracesByLength siano correttamente implementate
+        // e che epsilon sia definito.
+
+        // Specifica il nome del file di output
+        string filename = "test_results_output.txt";
+
+        // Chiama la funzione writeResults
+        writeResults(fractures, filename);
+
+        // Apri il file di output per la lettura
+        ifstream outFile(filename);
+        ASSERT_TRUE(outFile.is_open()) << "Il file non può essere aperto.";
+
+        string line;
+        getline(outFile, line);
+        EXPECT_EQ(line, "# FractureId; NumTraces");
+
+        // Leggi e verifica il contenuto del file
+        for (int fractureId : fractures.FracturesId)
+        {
+            getline(outFile, line);
+            int id, numTraces;
+            char delimiter;
+            stringstream ss(line);
+            ss >> id >> delimiter >> numTraces;
+            EXPECT_EQ(id, fractureId);
+
+            // Verifica che il numero di tracce corrisponda al numero previsto
+            int expectedNumTraces = 2; // Puoi cambiare questo valore se necessario
+            EXPECT_EQ(numTraces, expectedNumTraces);
+
+            getline(outFile, line);
+            EXPECT_EQ(line, "# TraceId; Tips; Length");
+
+            for (int i = 0; i < expectedNumTraces; ++i)
+            {
+                getline(outFile, line);
+                stringstream traceStream(line);
+                int traceId;
+                string tips;
+                double length;
+                traceStream >> traceId >> delimiter >> tips >> delimiter >> length;
+
+                // Verifica che i valori siano corretti
+                EXPECT_EQ(traceId, fractures.Traces[i].traceId);
+                EXPECT_EQ(tips, "true"); // Supponendo che tutte le tracce non passino il test
+                EXPECT_DOUBLE_EQ(length, fractures.Traces[i].length);
+            }
+        }
+
+        outFile.close();
+        remove(filename.c_str()); // Rimuovi il file di test dopo il test
+    }
+
+/*
     TEST(FRACTURESTEST, WriteResults)
        {
            Fractures fractures;
            fractures.NumberFractures = 3;
            fractures.FracturesId = {0, 1, 2};
 
-           Point p1 = {0, 0, -0};
+           Point p1 = {0, 0, 0};
            Point p2 = {1.6, 0, 0};
-           Point p3 = {0, 0, -0};
+           Point p3 = {0, 0, 0};
            Point p4 = {0, 1, 0};
 
-           fractures.Traces.emplace_back(0, 0, 1, p1, p2, true);
-           fractures.Traces.emplace_back(1, 0, 2, p3, p4, false);
+           fractures.Traces.emplace_back(0, 0, 1, p1, p2);
+           fractures.Traces.emplace_back(1, 0, 2, p3, p4);
 
            fractures.Traces[0].length = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
            fractures.Traces[1].length = sqrt(pow(p4.x - p3.x, 2) + pow(p4.y - p3.y, 2) + pow(p4.z - p3.z, 2));
@@ -244,6 +286,5 @@ namespace FractureLibrary
            remove(filename.c_str());
        }
 */
-
 }
 #endif

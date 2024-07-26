@@ -69,16 +69,17 @@ namespace FractureLibrary
     TEST(FRACTURESTEST, TestWriteTraces)
     {
         Fractures fractures;
-        fractures.NumberFractures = 2;
-        fractures.FracturesId = {0, 1};
+        fractures.NumberFractures = 3;
+        fractures.FracturesId = {0, 1, 2};
 
-        Point p1 = {0.1, 0.2, 0.3};
-        Point p2 = {0.4, 0.5, 0.6};
-        Point p3 = {1.1, 1.2, 1.3};
-        Point p4 = {1.4, 1.5, 1.6};
+        Point p1 = {0, 0, 0};
+        Point p2 = {1.6, 0, 0};
+        Point p3 = {0, 0, 0};
+        Point p4 = {0, 1, 0};
 
-        fractures.Traces.emplace_back(0, 0, 1, p1, p2);
-        fractures.Traces.emplace_back(1, 0, 1, p3, p4);
+        fractures.Traces.emplace_back(0, 0, 1, p1, p2, false, true);
+        fractures.Traces.emplace_back(1, 0, 2, p3, p4, true, false);
+
 
         string filename = "test_traces_output.txt";
 
@@ -125,7 +126,7 @@ namespace FractureLibrary
     }
 
 
-    TEST(FRACTURESTEST, SortTracesByLength)
+    TEST(FRACTURESTEST, TestSortTracesByLength)
     {
         vector<Trace> traces;
 
@@ -136,155 +137,81 @@ namespace FractureLibrary
         Point p5 = {4, 0, 0};
         Point p6 = {0, 5, 0};
 
-        traces.emplace_back(0, 0, 1, p1, p2);
-        traces.emplace_back(2, 0, 2, p1, p3);
-        traces.emplace_back(4, 0, 1, p1, p4);
-        traces.emplace_back(3, 1, 2, p1, p5);
-        traces.emplace_back(1, 1, 2, p1, p6);
+        traces.emplace_back(0, 0, 1, p1, p2, false, true);
+        traces.emplace_back(2, 0, 2, p1, p3, true, false);
+        traces.emplace_back(4, 0, 1, p1, p4, false, false);
+        traces.emplace_back(3, 1, 2, p1, p5, true, true);
+        traces.emplace_back(1, 1, 2, p1, p6, true, false);
 
         sortTracesByLength(traces);
 
         ASSERT_EQ(traces.size(), 5);
-
 
         ASSERT_EQ(traces[0].traceId, 1);
         ASSERT_EQ(traces[1].traceId, 3);
         ASSERT_EQ(traces[2].traceId, 4);
         ASSERT_EQ(traces[3].traceId, 2);
         ASSERT_EQ(traces[4].traceId, 0);
-
     }
+
 
     TEST(FRACTURESTEST, TestWriteResults)
     {
-        // Crea un oggetto Fractures di esempio
         Fractures fractures;
-        fractures.NumberFractures = 2;
-        fractures.FracturesId = {0, 1};
+        fractures.NumberFractures = 3;
+        fractures.FracturesId = {0, 1, 2};
 
-        Point p1 = {0.1, 0.2, 0.3};
-        Point p2 = {0.4, 0.5, 0.6};
-        Point p3 = {1.1, 1.2, 1.3};
-        Point p4 = {1.4, 1.5, 1.6};
+        Point p1 = {0, 0, 0};
+        Point p2 = {1.6, 0, 0};
+        Point p3 = {0, 0, 0};
+        Point p4 = {0, 1, 0};
 
-        // Aggiungi tracce
-        fractures.Traces.emplace_back(0, 0, 1, p1, p2);
-        fractures.Traces.emplace_back(1, 1, 0, p3, p4);
+        fractures.Traces.emplace_back(1, 0, 1, p1, p2, false, true);
+        fractures.Traces.emplace_back(0, 0, 2, p3, p4, true, false);
 
-        // Fai in modo che tutte le tracce non passino il test (per semplicità)
-        // e supponi che le funzioni isPointOnEdges e sortTracesByLength siano correttamente implementate
-        // e che epsilon sia definito.
+        fractures.Traces[0].length = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
+        fractures.Traces[1].length = sqrt(pow(p4.x - p3.x, 2) + pow(p4.y - p3.y, 2) + pow(p4.z - p3.z, 2));
 
-        // Specifica il nome del file di output
-        string filename = "test_results_output.txt";
+        string filename = "test_results.txt";
 
-        // Chiama la funzione writeResults
         writeResults(fractures, filename);
 
-        // Apri il file di output per la lettura
-        ifstream outFile(filename);
-        ASSERT_TRUE(outFile.is_open()) << "Il file non può essere aperto.";
+        ifstream inFile(filename);
+        ASSERT_TRUE(inFile.is_open());
 
         string line;
-        getline(outFile, line);
+
+        getline(inFile, line);
         EXPECT_EQ(line, "# FractureId; NumTraces");
+        getline(inFile, line);
+        EXPECT_EQ(line, "0; 2");
+        getline(inFile, line);
+        EXPECT_EQ(line, "# TraceId; Tips; Length");
+        getline(inFile, line);
+        EXPECT_EQ(line, "1; false; 1");
+        getline(inFile, line);
+        EXPECT_EQ(line, "0; true; 1.6");
 
-        // Leggi e verifica il contenuto del file
-        for (int fractureId : fractures.FracturesId)
-        {
-            getline(outFile, line);
-            int id, numTraces;
-            char delimiter;
-            stringstream ss(line);
-            ss >> id >> delimiter >> numTraces;
-            EXPECT_EQ(id, fractureId);
+        getline(inFile, line);
+        EXPECT_EQ(line, "# FractureId; NumTraces");
+        getline(inFile, line);
+        EXPECT_EQ(line, "1; 1");
+        getline(inFile, line);
+        EXPECT_EQ(line, "# TraceId; Tips; Length");
+        getline(inFile, line);
+        EXPECT_EQ(line, "0; true; 1.6");
 
-            // Verifica che il numero di tracce corrisponda al numero previsto
-            int expectedNumTraces = 2; // Puoi cambiare questo valore se necessario
-            EXPECT_EQ(numTraces, expectedNumTraces);
+        getline(inFile, line);
+        EXPECT_EQ(line, "# FractureId; NumTraces");
+        getline(inFile, line);
+        EXPECT_EQ(line, "2; 1");
+        getline(inFile, line);
+        EXPECT_EQ(line, "# TraceId; Tips; Length");
+        getline(inFile, line);
+        EXPECT_EQ(line, "1; false; 1");
 
-            getline(outFile, line);
-            EXPECT_EQ(line, "# TraceId; Tips; Length");
-
-            for (int i = 0; i < expectedNumTraces; ++i)
-            {
-                getline(outFile, line);
-                stringstream traceStream(line);
-                int traceId;
-                string tips;
-                double length;
-                traceStream >> traceId >> delimiter >> tips >> delimiter >> length;
-
-                // Verifica che i valori siano corretti
-                EXPECT_EQ(traceId, fractures.Traces[i].traceId);
-                EXPECT_EQ(tips, "true"); // Supponendo che tutte le tracce non passino il test
-                EXPECT_DOUBLE_EQ(length, fractures.Traces[i].length);
-            }
-        }
-
-        outFile.close();
-        remove(filename.c_str()); // Rimuovi il file di test dopo il test
+        inFile.close();
+        remove(filename.c_str());
     }
-
-/*
-    TEST(FRACTURESTEST, WriteResults)
-       {
-           Fractures fractures;
-           fractures.NumberFractures = 3;
-           fractures.FracturesId = {0, 1, 2};
-
-           Point p1 = {0, 0, 0};
-           Point p2 = {1.6, 0, 0};
-           Point p3 = {0, 0, 0};
-           Point p4 = {0, 1, 0};
-
-           fractures.Traces.emplace_back(0, 0, 1, p1, p2);
-           fractures.Traces.emplace_back(1, 0, 2, p3, p4);
-
-           fractures.Traces[0].length = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
-           fractures.Traces[1].length = sqrt(pow(p4.x - p3.x, 2) + pow(p4.y - p3.y, 2) + pow(p4.z - p3.z, 2));
-
-           string filename = "test_results.txt";
-
-           writeResults(fractures, filename);
-
-           ifstream inFile(filename);
-           ASSERT_TRUE(inFile.is_open());
-
-           string line;
-
-           getline(inFile, line);
-           EXPECT_EQ(line, "# FractureId; NumTraces");
-           getline(inFile, line);
-           EXPECT_EQ(line, "0; 2");
-           getline(inFile, line);
-           EXPECT_EQ(line, "# TraceId; Tips; Length");
-           getline(inFile, line);
-           EXPECT_EQ(line, "1; false; 1");
-           getline(inFile, line);
-           EXPECT_EQ(line, "0; true; 1.6");
-
-           getline(inFile, line);
-           EXPECT_EQ(line, "# FractureId; NumTraces");
-           getline(inFile, line);
-           EXPECT_EQ(line, "1; 1");
-           getline(inFile, line);
-           EXPECT_EQ(line, "# TraceId; Tips; Length");
-           getline(inFile, line);
-           EXPECT_EQ(line, "0; true; 1.6");
-
-           getline(inFile, line);
-           EXPECT_EQ(line, "# FractureId; NumTraces");
-           getline(inFile, line);
-           EXPECT_EQ(line, "2; 1");
-           getline(inFile, line);
-           EXPECT_EQ(line, "# TraceId; Tips; Length");
-           getline(inFile, line);
-           EXPECT_EQ(line, "1; false; 1");
-
-           inFile.close();
-           remove(filename.c_str());
-       }
-*/
 }
 #endif

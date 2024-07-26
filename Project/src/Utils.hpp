@@ -33,7 +33,7 @@ namespace FractureLibrary
    bool intersectPlanes(const Matrix3Xd& vertices1, const Matrix3Xd& vertices2,
                         Vector3d& pt1, Vector3d& pt2);
 
-   bool isPointOnEdges(const Matrix3Xd& points, const Vector3d& pt, double epsilon);
+   bool isPointOnEdges(const Matrix3Xd& points, const Vector3d& pt);
 
    Trace calculateTrace(const Matrix3Xd& P, const Matrix3Xd& Q, int id1, int id2,
                         int& traceId);

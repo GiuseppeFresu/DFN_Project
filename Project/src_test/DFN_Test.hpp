@@ -161,13 +161,13 @@ namespace FractureLibrary
         fractures.NumberFractures = 3;
         fractures.FracturesId = {0, 1, 2};
 
-        Point p1 = {0, 0, 0};
+        Point p1 = {0, 0, -0};
         Point p2 = {1.6, 0, 0};
-        Point p3 = {0, 0, 0};
+        Point p3 = {0, 0, -0};
         Point p4 = {0, 1, 0};
 
-        fractures.Traces.emplace_back(1, 0, 1, p1, p2, false, true);
-        fractures.Traces.emplace_back(0, 0, 2, p3, p4, true, false);
+        fractures.Traces.emplace_back(0, 0, 1, p1, p2, true, true);
+        fractures.Traces.emplace_back(1, 0, 2, p3, p4, false, false);
 
         fractures.Traces[0].length = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
         fractures.Traces[1].length = sqrt(pow(p4.x - p3.x, 2) + pow(p4.y - p3.y, 2) + pow(p4.z - p3.z, 2));

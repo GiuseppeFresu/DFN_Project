@@ -7,7 +7,7 @@
 namespace FractureLibrary
 {
 
-    const double epsilon = 1e-12;
+    const double epsilon = 1e-6;
 
 // ***************************************************************************
 
@@ -303,16 +303,15 @@ namespace FractureLibrary
             Vector3d ptToP1 = pt - p1;
 
             double edgeLengthSquared = edge.squaredNorm();
-            double t = ptToP1.dot(edge) / edgeLengthSquared;
+            double dotProduct = ptToP1.dot(edge);
 
-            if (t < 0.0 || t > 1.0)
+            if (dotProduct < 0 || dotProduct > edgeLengthSquared + epsilon)
             {
                 continue;
             }
 
-            Vector3d projection = p1 + t * edge;
-
-            double distanceSquared = (pt - projection).squaredNorm();
+            double projectionLengthSquared = dotProduct * dotProduct / edgeLengthSquared;
+            double distanceSquared = ptToP1.squaredNorm() - projectionLengthSquared;
 
             if (distanceSquared < epsilon * epsilon)
             {
@@ -330,19 +329,9 @@ namespace FractureLibrary
 
         if (intersectPlanes(P, Q, pt1, pt2))
         {
-            bool Tips1 = true;
-            if (isPointOnEdges(P, pt1) &&
-                isPointOnEdges(P, pt2))
-            {
-                Tips1 = false;
-            }
+            bool Tips1 = !(isPointOnEdges(P, pt1) && isPointOnEdges(P, pt2));
 
-            bool Tips2 = true;
-            if (isPointOnEdges(Q, pt1) &&
-                isPointOnEdges(Q, pt2))
-            {
-                Tips2 = false;
-            }
+            bool Tips2 = !(isPointOnEdges(Q, pt1) && isPointOnEdges(Q, pt2));
 
             return Trace(traceId++, id1, id2, {pt1.x(), pt1.y(), pt1.z()}, {pt2.x(), pt2.y(), pt2.z()}, Tips1, Tips2);
         }
@@ -501,13 +490,13 @@ namespace FractureLibrary
             return;
         }
 
-        outFile << "# FractureId; NumTraces" << endl;
         for (const auto& fractureId : fractures.FracturesId)
         {
             int numTraces = passing[fractureId].size() + non_passing[fractureId].size();
 
             if (numTraces != 0)
             {
+                outFile << "# FractureId; NumTraces" << endl;
                 outFile << fractureId << "; " << numTraces << endl;
                 outFile << "# TraceId; Tips; Length" << endl;
                 for (const auto& trace : passing[fractureId])
@@ -522,5 +511,5 @@ namespace FractureLibrary
         }
 
         outFile.close();
-        }
+    }
 }
